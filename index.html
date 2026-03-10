@@ -20,11 +20,17 @@
 
   body {
     background-color: var(--cream);
+    background-image:
+      radial-gradient(ellipse 70% 50% at 15% 20%, rgba(232,160,190,0.28) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 85% 10%, rgba(240,185,208,0.24) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 40% at 60% 75%, rgba(228,160,185,0.22) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 50% at 30% 90%, rgba(235,175,200,0.22) 0%, transparent 60%),
+      radial-gradient(ellipse 55% 35% at 90% 55%, rgba(230,170,195,0.18) 0%, transparent 60%);
     color: var(--ink);
     font-family: 'Space Mono', monospace;
     min-height: 100vh;
     overflow-x: hidden;
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='4' fill='%23e07898' opacity='0.8'/%3E%3C/svg%3E") 10 10, auto;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M12 2 L13.5 10.5 L22 12 L13.5 13.5 L12 22 L10.5 13.5 L2 12 L10.5 10.5 Z' fill='%23e07898' opacity='0.9'/%3E%3C/svg%3E") 12 12, auto;
   }
 
   body::before {
@@ -33,11 +39,6 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
     pointer-events: none; z-index: 9999;
   }
-
-  .blob { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.25; pointer-events: none; z-index: 0; }
-  .blob-1 { width: 400px; height: 400px; background: #f0d8e0; top: -100px; right: -100px; }
-  .blob-2 { width: 300px; height: 300px; background: #e8c8d8; bottom: 100px; left: -80px; }
-  .blob-3 { width: 200px; height: 200px; background: #f5e0e8; top: 40%; right: 10%; }
 
   .page { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px 80px; }
 
@@ -55,6 +56,7 @@
   .question-flow { width: 100%; max-width: 560px; animation: fadeUp 0.9s 0.1s ease both; }
   .question-card { display: none; flex-direction: column; align-items: center; gap: 20px; }
   .question-card.active { display: flex; animation: fadeIn 0.5s ease both; }
+  .question-card.leaving { animation: fadeOut 0.3s ease forwards; }
 
   .q-label { font-size: 11px; color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase; }
   .q-text { font-size: clamp(14px, 3vw, 18px); text-align: center; line-height: 1.6; color: var(--ink); }
@@ -107,15 +109,16 @@
   @keyframes cardReveal { from { opacity: 0; transform: translateY(30px) rotate(-3deg); } to { opacity: 1; transform: translateY(0); } }
 
   .card-face {
-    height: 215px; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 8px;
-    position: relative; padding: 16px;
+    height: 215px; display: grid;
+    grid-template-rows: 32px 1fr 32px;
+    align-items: center; justify-items: center;
+    position: relative; padding: 12px 16px;
   }
   .card-face::before { content: ''; position: absolute; inset: 8px; border: 1px solid rgba(255,255,255,0.25); border-radius: 10px; pointer-events: none; }
-  .card-symbol { font-size: 42px; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1)); }
-  .card-name { font-size: 10px; text-align: center; color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.2); letter-spacing: 0.08em; }
-  .card-position-label { font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.65); }
-  .card-reversed { font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.4); font-style: italic; margin-top: 2px; }
+  .card-symbol { font-size: 42px; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1)); display: flex; align-items: center; justify-content: center; }
+  .card-name { font-size: 10px; text-align: center; color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.2); letter-spacing: 0.08em; align-self: end; }
+  .card-position-label { font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.65); align-self: start; }
+  .card-reversed { font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.4); font-style: italic; }
 
   .reading-sections { width: 100%; display: flex; flex-direction: column; gap: 14px; }
   .reading-section {
@@ -155,6 +158,7 @@
 
   @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fadeOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-12px); } }
   @keyframes pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
 
   @media (max-width: 540px) {
@@ -167,10 +171,6 @@
 </style>
 </head>
 <body>
-<div class="blob blob-1"></div>
-<div class="blob blob-2"></div>
-<div class="blob blob-3"></div>
-
 <div class="page">
   <header>
     <p class="eyebrow">✦ a little divination ✦</p>
@@ -324,37 +324,52 @@ const SHADOWS = [
 ];
 
 const READINGS = {
-  energized_action:"Today has an electric charge to it. You woke up ready, and the universe is ready for you right back. Don't second-guess what you're feeling — the energy you're carrying is not accidental, it's aligned.",
-  energized_rest:"You have the energy, but today is quietly asking you to save some of it. Not everything needs to be consumed at full force. The most powerful thing you can do right now might be to choose what not to spend yourself on.",
-  energized_connect:"Your light is particularly bright today. Someone in your orbit needs to feel it — a message, a presence, a moment of your full attention. Don't keep it to yourself; warmth given freely always finds its way back.",
-  energized_reflect:"Energy without direction can scatter. Today, turn that brightness inward — sit with a question you've been too busy to ask yourself. What you find in the quiet may surprise you more than anything the outside world could offer.",
-  tired_action:"You're being asked to move even before you feel ready. Trust that the momentum will build as you go — it always does. The first step is the only one you need to take right now.",
-  tired_rest:"Your body is telling you something important, and it's worth listening to. Rest is not a pause from your life — it is part of it, woven in just as much as the doing. Today, ease is not giving up; it's the right choice.",
-  tired_connect:"Reaching out when you're tired can feel impossible, but sometimes it's the one thing that fills you back up. You don't have to perform or explain — just let someone sit beside you. Presence shared is presence restored.",
-  tired_reflect:"There's beauty in the in-between, even if it doesn't feel like it right now. You're not stuck — you're processing something that needs time to settle. Give yourself permission to not have it figured out yet.",
-  anxious_action:"That restless feeling? Channel it — don't fight it. Anxiety and excitement live in the same body, and right now yours is charged with something that can move. You have more momentum available to you than you realise.",
-  anxious_rest:"The spiral will slow if you let it. Find one small thing you can soften today — one breath, one gentle choice, one moment where you don't push back. That is not weakness; that is the whole practice.",
-  anxious_connect:"Carrying something alone makes it heavier than it needs to be. You don't have to explain everything or have the words perfectly right — just let someone sit beside you today. The weight of things shared is always lighter.",
-  anxious_reflect:"What you're feeling is information, not a verdict. Sit with the question today rather than rushing to answer it — sometimes the discomfort is pointing at exactly the thing worth understanding. You have time.",
-  peaceful_action:"From a place of peace, you can act with real clarity. Today's decisions made from this calm will be ones you feel good about looking back. Move forward, but carry this stillness with you as you do.",
-  peaceful_rest:"What a rare and precious thing — to begin a day already at ease. Protect this; don't let noise or obligation chip away at it before you've had the chance to really feel it. You don't have to fill every quiet moment.",
-  peaceful_connect:"Peace radiates without you having to do anything. The people around you will feel it simply by being near you today. You have something to give just by being present — don't underestimate that.",
-  peaceful_reflect:"You're in the perfect state for insight today. Something about your life is ready to be seen differently, and the clarity you have right now is the right lens for it. Let yourself think the thought you've been circling.",
+  energized_action:"Today has an electric charge to it, and it isn't accidental. You woke up ready, and the universe is ready for you right back — there's a rare alignment between your inner state and what the day is asking for. Don't second-guess it or talk yourself out of it. Move with what you're feeling, because this kind of momentum is a gift.",
+  energized_rest:"You have real energy today, and that's worth acknowledging. But the cards are quietly asking you to be discerning with it — not everything deserves your full force, and not every door that opens today needs to be walked through. The most powerful move might be knowing what to hold back. Save something for yourself.",
+  energized_connect:"Your light is particularly bright today, and other people will notice before you do. Someone in your orbit needs to feel it — a message, a presence, a moment of your undivided attention could mean more than you'd expect. Don't keep what you're carrying to yourself. Warmth given freely always finds its way back.",
+  energized_reflect:"Bright energy without direction has a way of scattering, and today the cards are asking you to turn some of that light inward. Sit with a question you've been too busy or too afraid to ask yourself. You have the clarity right now to look at something honestly. What you find in the quiet may matter more than anything the outside world is offering.",
+  tired_action:"You're being asked to move even before you feel ready, and that's an uncomfortable place to be. But trust that the momentum builds as you go — the body finds its rhythm once it's in motion. You don't need to feel energised before you begin. The first step is the only one that matters right now.",
+  tired_rest:"Your body is telling you something, and it's worth actually listening to rather than pushing past. Rest is not a pause from your life — it is woven into it just as much as the doing is. Today, choosing ease is not giving up on anything. It is, in fact, the most honest response to where you are.",
+  tired_connect:"Reaching out when you're tired can feel like the last thing you have capacity for, but sometimes it's exactly what restores you. You don't have to perform or explain or be good company — just let someone sit beside you in it. The people who love you don't need you at full capacity. Presence shared is presence restored.",
+  tired_reflect:"There is something quietly beautiful about the in-between, even when it doesn't feel that way. You're not stuck — you're processing something that needs time and space to settle before it can be understood. Don't rush yourself toward resolution. Give yourself permission to not have this figured out yet.",
+  anxious_action:"That restless feeling doesn't have to be the enemy — it can be fuel. Anxiety and excitement are physiologically almost identical, and right now your body is charged with something that has real momentum in it. Don't fight what you're feeling; redirect it. You have more available to you right now than you're giving yourself credit for.",
+  anxious_rest:"The spiral will slow down if you give it permission to. Find one small thing you can soften today — one breath, one gentler choice, one moment where you don't push back against what is. This is not weakness or avoidance. This is, in fact, the whole practice, and it's harder than it sounds.",
+  anxious_connect:"Carrying something alone always makes it heavier than it actually is. You don't need to have the words perfectly right, or explain everything, or even fully understand what you're feeling before you let someone in. Just let someone sit beside you in it today. The weight of shared things is always lighter.",
+  anxious_reflect:"What you're feeling right now is information — it's not a verdict on you or your situation. Sit with the question today rather than rushing to resolve it, because sometimes the discomfort is pointing directly at the thing most worth understanding. You're not behind for not having the answer yet. You have more time than it feels like.",
+  peaceful_action:"This kind of calm is rare, and it's the perfect foundation to act from. Decisions made from stillness tend to be the ones that hold. Move forward today — there's something ready to be done — but carry this quietness with you as you do it. Don't let the pace of the world pull you out of what you're feeling.",
+  peaceful_rest:"What a rare and genuinely precious thing — to begin a day already at ease with yourself. Protect it. Don't let obligation or noise chip away at it before you've had the chance to really settle into it. You don't have to fill every quiet moment with something. The ease itself is enough.",
+  peaceful_connect:"Peace radiates outward without you having to do a single thing. The people around you will feel something shift simply by being in your presence today. You have something real to offer just by showing up as you are. Don't underestimate how much that matters to the people you love.",
+  peaceful_reflect:"You're in exactly the right state to see something clearly today. Something about your life — a situation, a relationship, a pattern — is ready to be understood differently, and the stillness you're carrying is the right lens for it. Let yourself think the thought you've been circling around. Today, you can look at it.",
+};
+
+const CARD_BLURBS = {
+  energized: "The Sun has drawn your restless, ready energy into its light. This card asks you to lead with confidence today — not arrogance, but a quiet trust in what you already know.",
+  tired:     "The Moon doesn't ask you to shine; it simply asks you to feel. Let your tiredness tell you something true today rather than being something to push past.",
+  anxious:   "The Tower breaks things open, but only what was already unstable. The restlessness you're carrying today may be asking you to look at something honestly rather than holding it together by force.",
+  peaceful:  "The Star is the card of quiet hope and restoration. Your peace today is not passive — it is a kind of power, and it's worth protecting.",
+  action:    "The Chariot is all forward motion and directed will. Today is asking you to decide, commit, and move — not frantically, but with intention.",
+  rest:      "The Hermit turns inward and finds everything it needs there. Your call to rest or reflect today is not a retreat — it is where the real work happens.",
+  connect:   "The Lovers is not just about romance — it's about the moments of genuine recognition between people. Today, connection is where something important will happen.",
+  reflect:   "The High Priestess knows more than she says. What she asks of you today is not to speak but to listen — to yourself, first.",
+  moon:      "The Moon governs what moves beneath the surface. Trust the pull you're feeling today, even if you can't name it yet.",
+  path:      "The Fool steps forward without knowing exactly what comes next, and that's the point. Something new is available to you today, but only if you're willing to begin.",
+  flame:     "Strength is not force — it is the quiet power of someone who knows themselves. Today, your courage is not about being loud; it's about being honest.",
+  key:       "The Emperor brings structure and authority. Today, the power you're looking for is already yours — it just needs to be claimed.",
 };
 
 const AFFIRMATIONS = [
-  "you are allowed to change your mind at any point",
-  "what you're feeling right now is completely valid",
-  "you don't have to earn rest — it's already yours",
-  "the version of you from last year would be amazed",
-  "you are not behind, you are exactly on time",
-  "your softness is not a weakness, it's a gift",
-  "something is turning in your favour, even now",
-  "you've made it through 100% of your hard days so far",
-  "the right things are finding their way to you",
-  "you are allowed to take up space today",
-  "not every day has to mean something — some can just be lived",
-  "your pace is the right pace",
+  "You are allowed to change your mind at any point",
+  "What you're feeling right now is completely valid",
+  "You don't have to earn rest — it's already yours",
+  "The version of you from last year would be amazed",
+  "You are not behind, you are exactly on time",
+  "Your softness is not a weakness, it's a gift",
+  "Something is turning in your favour, even now",
+  "You've made it through 100% of your hard days so far",
+  "The right things are finding their way to you",
+  "You are allowed to take up space today",
+  "Not every day has to mean something — some can just be lived",
+  "Your pace is the right pace",
 ];
 
 // ── Answer flow ───────────────────────────────────────────────────────────────
@@ -365,12 +380,22 @@ function answer(q, val) {
   answers[q] = val;
   currentQ++;
   if (currentQ < 3) {
-    document.getElementById(`qCard${q}`).classList.remove('active');
-    document.getElementById(`qCard${currentQ}`).classList.add('active');
+    const current = document.getElementById(`qCard${q}`);
+    current.classList.add('leaving');
+    setTimeout(() => {
+      current.classList.remove('active', 'leaving');
+      current.style.display = 'none';
+      const next = document.getElementById(`qCard${currentQ}`);
+      next.classList.add('active');
+    }, 400);
   } else {
-    document.getElementById('questionFlow').style.display = 'none';
-    document.getElementById('loading').style.display = 'flex';
-    setTimeout(showResults, 4800);
+    const current = document.getElementById(`qCard${q}`);
+    current.classList.add('leaving');
+    setTimeout(() => {
+      document.getElementById('questionFlow').style.display = 'none';
+      document.getElementById('loading').style.display = 'flex';
+      setTimeout(showResults, 3800);
+    }, 400);
   }
 }
 
@@ -378,9 +403,19 @@ function answer(q, val) {
 function showResults() {
   document.getElementById('loading').style.display = 'none';
 
-  const c1 = CARDS[answers[0]];
-  const c2 = CARDS[answers[1]];
-  const c3 = CARDS[answers[2]];
+  // Deduplicate: if two answers map to the same card, swap in a fallback
+  const fallbacks = ['moon','path','flame','key'];
+  const usedKeys = new Set();
+  const cardKeys = answers.map((a, i) => {
+    if (!usedKeys.has(a)) { usedKeys.add(a); return a; }
+    // find first fallback not yet used
+    const fb = fallbacks.find(f => !usedKeys.has(f)) || fallbacks[i % fallbacks.length];
+    usedKeys.add(fb); return fb;
+  });
+
+  const c1 = CARDS[cardKeys[0]];
+  const c2 = CARDS[cardKeys[1]];
+  const c3 = CARDS[cardKeys[2]];
   const shadow = SHADOWS[Math.floor(sr(DAY_SEED + 99) * SHADOWS.length)];
   const reading = READINGS[`${answers[0]}_${answers[1]}`] || "Today holds something unexpected. Stay open — not everything needs to be understood right away.";
   const affirmation = AFFIRMATIONS[Math.floor(sr(DAY_SEED + 55) * AFFIRMATIONS.length)];
@@ -402,7 +437,7 @@ function showResults() {
         <p class="section-body">${reading}</p>
       </div>
       <div class="reading-section" style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;">
-        ${[c1,c2,c3].map(c=>`<div style="flex:1;min-width:100px;"><p class="section-label">✦ ${c.name}</p><p class="section-body"><em>${c.meaning}</em> — hold this energy gently throughout the day.</p></div>`).join('')}
+        ${[[c1,cardKeys[0]],[c2,cardKeys[1]],[c3,cardKeys[2]]].map(([c,key])=>`<div style="flex:1;min-width:100px;"><p class="section-label">✦ ${c.name}</p><p class="section-body">${CARD_BLURBS[key]}</p></div>`).join('')}
       </div>
       <div class="reading-section shadow-section">
         <p class="section-label">✦ shadow card — ${shadow.name}</p>
@@ -435,8 +470,7 @@ function shadowCard(s) {
     <div class="card-face" style="background:linear-gradient(160deg,${s.color[0]},${s.color[1]});">
       <span class="card-position-label">shadow</span>
       <span class="card-symbol">${s.symbol}</span>
-      <span class="card-name">${s.name}</span>
-      <span class="card-reversed">reversed</span>
+      <span class="card-name" style="display:flex;flex-direction:column;align-items:center;gap:2px;">${s.name}<span class="card-reversed">reversed</span></span>
     </div></div>`;
 }
 
