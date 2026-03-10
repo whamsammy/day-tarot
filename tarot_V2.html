@@ -8,10 +8,8 @@
 <style>
   :root {
     --cream: #faf6f0;
-    --warm: #fae4ea;
     --blush: #f4b8cc;
     --rose: #e0527a;
-    --sage: #a8c4b8;
     --dusty: #d4a0bc;
     --gold: #e07898;
     --ink: #2d1f26;
@@ -29,465 +27,142 @@
     cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='4' fill='%23e07898' opacity='0.8'/%3E%3C/svg%3E") 10 10, auto;
   }
 
-  /* Texture overlay */
   body::before {
     content: '';
-    position: fixed;
-    inset: 0;
+    position: fixed; inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
+    pointer-events: none; z-index: 9999;
   }
 
-  /* Decorative blobs */
-  .blob {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.25;
-    pointer-events: none;
-    z-index: 0;
-  }
+  .blob { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.25; pointer-events: none; z-index: 0; }
   .blob-1 { width: 400px; height: 400px; background: #f0d8e0; top: -100px; right: -100px; }
   .blob-2 { width: 300px; height: 300px; background: #e8c8d8; bottom: 100px; left: -80px; }
   .blob-3 { width: 200px; height: 200px; background: #f5e0e8; top: 40%; right: 10%; }
 
-  .page {
-    position: relative;
-    z-index: 1;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px 20px 80px;
-  }
+  .page { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px 80px; }
 
-  /* Header */
-  header {
-    text-align: center;
-    margin-bottom: 48px;
-    animation: fadeUp 0.8s ease both;
-  }
+  header { text-align: center; margin-bottom: 48px; animation: fadeUp 0.8s ease both; }
 
-  .eyebrow {
-    font-family: 'Space Mono', monospace;
-    font-weight: 400;
-    font-size: 11px;
-    color: var(--rose);
-    letter-spacing: 0.2em;
-    text-transform: lowercase;
-    margin-bottom: 8px;
-  }
+  .eyebrow { font-size: 11px; color: var(--rose); letter-spacing: 0.2em; text-transform: lowercase; margin-bottom: 8px; }
 
-  h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(42px, 8vw, 72px);
-    font-weight: 400;
-    line-height: 1.1;
-    color: var(--ink);
-  }
+  h1 { font-family: 'DM Serif Display', serif; font-size: clamp(42px, 8vw, 72px); font-weight: 400; line-height: 1.1; color: var(--ink); }
+  h1 em { font-style: italic; color: var(--rose); }
 
-  h1 em {
-    font-style: italic;
-    color: var(--rose);
-  }
+  .date-line { margin-top: 10px; font-size: 10px; color: var(--soft-ink); opacity: 0.5; letter-spacing: 0.18em; }
+  .subtitle { margin-top: 6px; font-style: italic; font-size: 12px; color: var(--soft-ink); opacity: 0.7; letter-spacing: 0.08em; }
+  .stars { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 16px 0; color: var(--gold); font-size: 18px; letter-spacing: 4px; }
 
-  .subtitle {
-    margin-top: 12px;
-    font-family: 'Space Mono', monospace;
-    font-style: italic;
-    font-size: 12px;
-    color: var(--soft-ink);
-    opacity: 0.7;
-    letter-spacing: 0.08em;
-  }
-
-  /* Stars decoration */
-  .stars {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin: 16px 0;
-    color: var(--gold);
-    font-size: 18px;
-    letter-spacing: 4px;
-  }
-
-  /* Question flow */
-  .question-flow {
-    width: 100%;
-    max-width: 560px;
-    animation: fadeUp 0.9s 0.1s ease both;
-  }
-
-  .question-card {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
+  .question-flow { width: 100%; max-width: 560px; animation: fadeUp 0.9s 0.1s ease both; }
+  .question-card { display: none; flex-direction: column; align-items: center; gap: 20px; }
   .question-card.active { display: flex; animation: fadeIn 0.5s ease both; }
 
-  .q-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--gold);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-  }
+  .q-label { font-size: 11px; color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase; }
+  .q-text { font-size: clamp(14px, 3vw, 18px); text-align: center; line-height: 1.6; color: var(--ink); }
 
-  .q-text {
-    font-family: 'Space Mono', monospace;
-    font-size: clamp(15px, 3vw, 19px);
-    text-align: center;
-    line-height: 1.4;
-    color: var(--ink);
-  }
-
-  .options-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    width: 100%;
-  }
+  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
 
   .option-btn {
-    background: white;
-    border: 1.5px solid rgba(45,38,32,0.12);
-    border-radius: 18px;
-    padding: 16px 14px;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--ink);
-    cursor: pointer;
-    transition: all 0.25s ease;
-    text-align: center;
-    line-height: 1.4;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-    position: relative;
-    overflow: hidden;
+    background: white; border: 1.5px solid rgba(45,31,38,0.12); border-radius: 18px;
+    padding: 16px 14px; font-family: 'Space Mono', monospace; font-size: 11px;
+    color: var(--ink); cursor: pointer; transition: all 0.25s ease;
+    text-align: center; line-height: 1.6; box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    position: relative; overflow: hidden;
   }
-
-  .option-btn::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, var(--blush), var(--dusty));
-    opacity: 0;
-    transition: opacity 0.25s;
-  }
-
-  .option-btn:hover {
-    border-color: var(--gold);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-  }
-
+  .option-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--blush), var(--dusty)); opacity: 0; transition: opacity 0.25s; }
+  .option-btn:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
   .option-btn:hover::before { opacity: 0.08; }
+  .option-btn span { position: relative; z-index: 1; display: block; }
+  .option-emoji { font-size: 22px; display: block; margin-bottom: 6px; }
 
-  .option-btn span {
-    position: relative;
-    z-index: 1;
-    display: block;
-  }
-
-  .option-emoji {
-    font-size: 24px;
-    display: block;
-    margin-bottom: 6px;
-  }
-
-  /* Progress dots */
-  .progress-dots {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    margin-top: 8px;
-  }
-
-  .dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: rgba(45,38,32,0.15);
-    transition: all 0.3s ease;
-  }
+  .progress-dots { display: flex; gap: 8px; justify-content: center; margin-top: 8px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(45,31,38,0.15); transition: all 0.3s ease; }
   .dot.filled { background: var(--gold); transform: scale(1.2); }
 
-  /* Loading state */
-  #loading {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    padding: 40px;
-    animation: fadeIn 0.5s ease both;
-  }
-
-  .card-shuffle {
-    display: flex;
-    gap: -10px;
-    position: relative;
-    height: 100px;
-    width: 200px;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .mini-card {
-    width: 50px;
-    height: 80px;
-    border-radius: 8px;
-    position: absolute;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-  }
-
-  .mini-card:nth-child(1) {
-    background: linear-gradient(145deg, #f4b8cc, #e0527a);
-    animation: shuffle1 1.8s ease-in-out infinite;
-    z-index: 3;
-  }
-  .mini-card:nth-child(2) {
-    background: linear-gradient(145deg, #f9d0df, #d4a0bc);
-    animation: shuffle2 1.8s 0.2s ease-in-out infinite;
-    z-index: 2;
-  }
-  .mini-card:nth-child(3) {
-    background: linear-gradient(145deg, #e8b0cc, #c4729a);
-    animation: shuffle3 1.8s 0.4s ease-in-out infinite;
-    z-index: 1;
-  }
-
+  #loading { display: none; flex-direction: column; align-items: center; gap: 20px; padding: 40px; animation: fadeIn 0.5s ease both; }
+  .card-shuffle { display: flex; position: relative; height: 100px; width: 200px; justify-content: center; align-items: center; }
+  .mini-card { width: 50px; height: 80px; border-radius: 8px; position: absolute; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+  .mini-card:nth-child(1) { background: linear-gradient(145deg, #f4b8cc, #e0527a); animation: shuffle1 1.8s ease-in-out infinite; z-index: 3; }
+  .mini-card:nth-child(2) { background: linear-gradient(145deg, #f9d0df, #d4a0bc); animation: shuffle2 1.8s 0.2s ease-in-out infinite; z-index: 2; }
+  .mini-card:nth-child(3) { background: linear-gradient(145deg, #e8b0cc, #c4729a); animation: shuffle3 1.8s 0.4s ease-in-out infinite; z-index: 1; }
   @keyframes shuffle1 { 0%,100%{transform:rotate(-15deg) translateX(-20px)} 50%{transform:rotate(5deg) translateX(10px) translateY(-10px)} }
   @keyframes shuffle2 { 0%,100%{transform:rotate(0deg) translateX(0)} 50%{transform:rotate(-10deg) translateX(-15px) translateY(5px)} }
   @keyframes shuffle3 { 0%,100%{transform:rotate(12deg) translateX(20px)} 50%{transform:rotate(-5deg) translateX(5px) translateY(-8px)} }
+  .loading-text { font-size: 13px; color: var(--soft-ink); animation: pulse 2s ease-in-out infinite; }
 
-  .loading-text {
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    color: var(--soft-ink);
-    animation: pulse 2s ease-in-out infinite;
-  }
+  #results { display: none; flex-direction: column; align-items: center; gap: 28px; width: 100%; max-width: 680px; animation: fadeUp 0.6s ease both; }
 
-  /* Results */
-  #results {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    gap: 32px;
-    width: 100%;
-    max-width: 640px;
-    animation: fadeUp 0.6s ease both;
-  }
+  .result-header { text-align: center; }
+  .result-eyebrow { font-size: 11px; color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase; }
+  .result-title { font-family: 'DM Serif Display', serif; font-size: clamp(26px, 5vw, 44px); font-weight: 400; line-height: 1.2; margin: 8px 0; }
+  .result-title em { font-style: italic; color: var(--rose); }
 
-  .result-header {
-    text-align: center;
-  }
-
-  .result-eyebrow {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--gold);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-  }
-
-  .result-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(28px, 6vw, 46px);
-    font-weight: 400;
-    line-height: 1.2;
-    margin: 8px 0;
-  }
-
-  /* Card display */
-  .cards-row {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-    width: 100%;
-  }
-
-  .tarot-card {
-    width: 160px;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-    animation: cardReveal 0.5s ease both;
-    flex-shrink: 0;
-  }
-
-  .tarot-card:nth-child(1) { animation-delay: 0.1s; transform-origin: bottom center; }
-  .tarot-card:nth-child(2) { animation-delay: 0.3s; }
-  .tarot-card:nth-child(3) { animation-delay: 0.5s; }
-
-  @keyframes cardReveal {
-    from { opacity: 0; transform: translateY(30px) rotate(-3deg); }
-    to { opacity: 1; transform: translateY(0) rotate(0deg); }
-  }
+  .cards-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; width: 100%; }
+  .tarot-card { width: 145px; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.12); animation: cardReveal 0.5s ease both; flex-shrink: 0; }
+  .tarot-card:nth-child(1) { animation-delay: 0.1s; }
+  .tarot-card:nth-child(2) { animation-delay: 0.25s; }
+  .tarot-card:nth-child(3) { animation-delay: 0.4s; }
+  .tarot-card:nth-child(4) { animation-delay: 0.55s; }
+  .tarot-card.shadow { opacity: 0.82; }
+  .tarot-card.shadow .card-face { filter: saturate(0.4) brightness(0.8); }
+  @keyframes cardReveal { from { opacity: 0; transform: translateY(30px) rotate(-3deg); } to { opacity: 1; transform: translateY(0); } }
 
   .card-face {
-    height: 240px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    position: relative;
-    padding: 16px;
+    height: 215px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 8px;
+    position: relative; padding: 16px;
   }
+  .card-face::before { content: ''; position: absolute; inset: 8px; border: 1px solid rgba(255,255,255,0.25); border-radius: 10px; pointer-events: none; }
+  .card-symbol { font-size: 42px; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1)); }
+  .card-name { font-size: 10px; text-align: center; color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.2); letter-spacing: 0.08em; }
+  .card-position-label { font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.65); }
+  .card-reversed { font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.4); font-style: italic; margin-top: 2px; }
 
-  .card-symbol {
-    font-size: 52px;
-    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1));
-  }
-
-  .card-name {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    text-align: center;
-    color: white;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    letter-spacing: 0.05em;
-  }
-
-  .card-position-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.75);
-  }
-
-  /* Decorative border on cards */
-  .card-face::before {
-    content: '';
-    position: absolute;
-    inset: 8px;
-    border: 1px solid rgba(255,255,255,0.25);
-    border-radius: 10px;
-    pointer-events: none;
-  }
-
-  /* Reading sections */
-  .reading-sections {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
+  .reading-sections { width: 100%; display: flex; flex-direction: column; gap: 14px; }
   .reading-section {
-    background: white;
-    border-radius: 20px;
-    padding: 24px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.05);
-    animation: fadeUp 0.5s ease both;
-    border: 1px solid rgba(45,38,32,0.07);
+    background: white; border-radius: 20px; padding: 22px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.05); animation: fadeUp 0.5s ease both;
+    border: 1px solid rgba(45,31,38,0.07);
   }
-
   .reading-section:nth-child(1) { animation-delay: 0.6s; }
   .reading-section:nth-child(2) { animation-delay: 0.75s; }
-  .reading-section:nth-child(3) { animation-delay: 0.9s; }
+  .reading-section:nth-child(3) { animation-delay: 0.85s; }
+  .reading-section:nth-child(4) { animation-delay: 0.95s; }
 
-  .section-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    color: var(--gold);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
+  .section-label { font-size: 10px; color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 10px; }
+  .section-body { font-size: 12px; line-height: 1.85; color: var(--soft-ink); }
+  .section-body em { font-style: italic; color: var(--rose); }
 
-  .section-title {
-    font-family: 'Space Mono', monospace;
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 10px;
-    color: var(--ink);
-  }
+  .shadow-section { background: linear-gradient(135deg, #2d1f2610, #3d1f2a16) !important; }
+  .shadow-section .section-label { color: var(--soft-ink) !important; opacity: 0.7; }
 
-  .section-body {
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    line-height: 1.75;
-    color: var(--soft-ink);
-  }
-
-  .section-body em {
-    font-style: italic;
-    color: var(--rose);
-  }
-
-  /* Affirmation pill */
   .affirmation {
-    background: linear-gradient(135deg, var(--ink), #3d3028);
-    color: var(--cream);
-    border-radius: 100px;
-    padding: 14px 28px;
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    text-align: center;
-    letter-spacing: 0.02em;
-    animation: fadeUp 0.5s 1s ease both;
+    background: linear-gradient(135deg, var(--ink), #3d2030);
+    color: var(--cream); border-radius: 100px; padding: 14px 28px;
+    font-size: 12px; font-style: italic; text-align: center;
+    letter-spacing: 0.03em; animation: fadeUp 0.5s 1s ease both;
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
   }
 
-  /* Reload button */
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; animation: fadeUp 0.5s 1.1s ease both; }
   .again-btn {
-    background: transparent;
-    border: 1.5px solid var(--ink);
-    border-radius: 100px;
-    padding: 12px 32px;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--ink);
-    cursor: pointer;
-    transition: all 0.25s;
-    animation: fadeUp 0.5s 1.1s ease both;
+    border-radius: 100px; padding: 12px 28px;
+    font-family: 'Space Mono', monospace; font-size: 11px; cursor: pointer; transition: all 0.25s;
   }
-  .again-btn:hover {
-    background: var(--ink);
-    color: var(--cream);
-    transform: scale(1.02);
-  }
+  .again-btn { background: transparent; border: 1.5px solid var(--ink); color: var(--ink); }
+  .again-btn:hover { background: var(--ink); color: var(--cream); transform: scale(1.02); }
 
-  /* Animations */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  footer { margin-top: 60px; text-align: center; font-size: 10px; color: var(--soft-ink); opacity: 0.4; animation: fadeIn 1s 0.5s ease both; }
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
 
-  @keyframes pulse {
-    0%,100% { opacity: 0.6; }
-    50% { opacity: 1; }
-  }
-
-  /* Footer */
-  footer {
-    margin-top: 60px;
-    text-align: center;
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    color: var(--soft-ink);
-    opacity: 0.5;
-    animation: fadeIn 1s 0.5s ease both;
-  }
-
-  /* Mobile */
-  @media (max-width: 480px) {
+  @media (max-width: 540px) {
     .options-grid { grid-template-columns: 1fr; }
-    .cards-row { gap: 10px; }
-    .tarot-card { width: 130px; }
-    .card-face { height: 200px; }
-    .card-symbol { font-size: 40px; }
+    .cards-row { gap: 8px; }
+    .tarot-card { width: 118px; }
+    .card-face { height: 180px; }
+    .card-symbol { font-size: 34px; }
   }
 </style>
 </head>
@@ -501,114 +176,170 @@
     <p class="eyebrow">✦ a little divination ✦</p>
     <h1>your day<br>in <em>tarot</em></h1>
     <div class="stars">✦ ✧ ✦</div>
-    <p class="subtitle">three cards, drawn just for today</p>
+    <p class="date-line" id="dateLine"></p>
+    <p class="subtitle">four cards, drawn just for today</p>
   </header>
 
-  <!-- Questions -->
   <div class="question-flow" id="questionFlow">
-
-    <div class="question-card active" data-q="0">
+    <div class="question-card active" id="qCard0">
       <p class="q-label">question 1 of 3</p>
-      <p class="q-text">How did you wake up this morning?</p>
-      <div class="options-grid">
-        <button class="option-btn" onclick="answer(0,'energized')"><span><span class="option-emoji">☀️</span>ready to take on the world</span></button>
-        <button class="option-btn" onclick="answer(0,'tired')"><span><span class="option-emoji">🌙</span>still half in a dream</span></button>
-        <button class="option-btn" onclick="answer(0,'anxious')"><span><span class="option-emoji">🌀</span>with something on my mind</span></button>
-        <button class="option-btn" onclick="answer(0,'peaceful')"><span><span class="option-emoji">🍃</span>slow and peaceful</span></button>
-      </div>
-      <div class="progress-dots">
-        <div class="dot filled"></div><div class="dot"></div><div class="dot"></div>
-      </div>
+      <p class="q-text" id="qText0"></p>
+      <div class="options-grid" id="qOpts0"></div>
+      <div class="progress-dots"><div class="dot filled"></div><div class="dot"></div><div class="dot"></div></div>
     </div>
-
-    <div class="question-card" data-q="1">
+    <div class="question-card" id="qCard1">
       <p class="q-label">question 2 of 3</p>
-      <p class="q-text">What does today feel like it's asking of you?</p>
-      <div class="options-grid">
-        <button class="option-btn" onclick="answer(1,'action')"><span><span class="option-emoji">⚡</span>to move, decide, act</span></button>
-        <button class="option-btn" onclick="answer(1,'rest')"><span><span class="option-emoji">🫧</span>to slow down and breathe</span></button>
-        <button class="option-btn" onclick="answer(1,'connect')"><span><span class="option-emoji">🤝</span>to reach out to someone</span></button>
-        <button class="option-btn" onclick="answer(1,'reflect')"><span><span class="option-emoji">🪞</span>to look inward</span></button>
-      </div>
-      <div class="progress-dots">
-        <div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div>
-      </div>
+      <p class="q-text" id="qText1"></p>
+      <div class="options-grid" id="qOpts1"></div>
+      <div class="progress-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div></div>
     </div>
-
-    <div class="question-card" data-q="2">
+    <div class="question-card" id="qCard2">
       <p class="q-label">question 3 of 3</p>
-      <p class="q-text">Pick the image that calls to you right now.</p>
-      <div class="options-grid">
-        <button class="option-btn" onclick="answer(2,'moon')"><span><span class="option-emoji">🌕</span>a full moon over water</span></button>
-        <button class="option-btn" onclick="answer(2,'path')"><span><span class="option-emoji">🌿</span>a path into the woods</span></button>
-        <button class="option-btn" onclick="answer(2,'flame')"><span><span class="option-emoji">🕯️</span>a single candle flame</span></button>
-        <button class="option-btn" onclick="answer(2,'key')"><span><span class="option-emoji">🗝️</span>an ornate golden key</span></button>
-      </div>
-      <div class="progress-dots">
-        <div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div>
-      </div>
+      <p class="q-text" id="qText2"></p>
+      <div class="options-grid" id="qOpts2"></div>
+      <div class="progress-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
     </div>
-
   </div>
 
-  <!-- Loading -->
   <div id="loading">
     <div class="card-shuffle">
-      <div class="mini-card"></div>
-      <div class="mini-card"></div>
-      <div class="mini-card"></div>
+      <div class="mini-card"></div><div class="mini-card"></div><div class="mini-card"></div>
     </div>
     <p class="loading-text">reading the cards for you...</p>
   </div>
 
-  <!-- Results -->
   <div id="results"></div>
 </div>
 
-<footer>made with care ✦ refresh for a new reading</footer>
+<footer>made with care ✦ come back tomorrow for a new reading</footer>
 
 <script>
-const answers = {};
-let currentQ = 0;
+// ── Date & seed ───────────────────────────────────────────────────────────────
+const NOW = new Date();
+const DAY_STR = NOW.toLocaleDateString('en-GB', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+document.getElementById('dateLine').textContent = DAY_STR.toLowerCase();
+const DAY_SEED = Math.floor(NOW / 86400000);
 
-const CARDS = {
-  morning: {
-    energized:  { name: 'The Sun',        symbol: '☀️', color: ['#f9d77e','#e8a634'], meaning: 'vitality' },
-    tired:      { name: 'The Moon',       symbol: '🌙', color: ['#8fa6c8','#5a7a9e'], meaning: 'intuition' },
-    anxious:    { name: 'The Tower',      symbol: '⚡', color: ['#c97d6e','#9e4f3e'], meaning: 'change' },
-    peaceful:   { name: 'The Star',       symbol: '✨', color: ['#9bbaa8','#5e8a72'], meaning: 'hope' },
-  },
-  ask: {
-    action:     { name: 'The Chariot',   symbol: '🏹', color: ['#c9a96e','#9e7a3e'], meaning: 'momentum' },
-    rest:       { name: 'The Hermit',    symbol: '🕯️', color: ['#9b8ea8','#6e5e7a'], meaning: 'solitude' },
-    connect:    { name: 'The Lovers',    symbol: '🌹', color: ['#e8c4b0','#c97d6e'], meaning: 'connection' },
-    reflect:    { name: 'The High Priestess', symbol: '🌀', color: ['#a8b4c8','#6e7e9a'], meaning: 'wisdom' },
-  },
-  image: {
-    moon:       { name: 'The Moon',      symbol: '🌕', color: ['#8fa6c8','#4a6a8e'], meaning: 'mystery' },
-    path:       { name: 'The Fool',      symbol: '🍃', color: ['#9bbaa8','#4e7a62'], meaning: 'adventure' },
-    flame:      { name: 'Strength',      symbol: '🔥', color: ['#e8a66e','#c97d3e'], meaning: 'courage' },
-    key:        { name: 'The Emperor',   symbol: '🗝️', color: ['#c9a96e','#8e6a2e'], meaning: 'power' },
+function sr(seed) { const x = Math.sin(seed + 1) * 10000; return x - Math.floor(x); }
+
+// ── 50-question bank ──────────────────────────────────────────────────────────
+const QB = [
+  { t:"How did you wake up this morning?", o:[{e:"☀️",l:"ready to take on the world",v:"energized"},{e:"🌙",l:"still half in a dream",v:"tired"},{e:"🌀",l:"with something on my mind",v:"anxious"},{e:"🍃",l:"slow and peaceful",v:"peaceful"}]},
+  { t:"What does today feel like it's asking of you?", o:[{e:"⚡",l:"to move, decide, act",v:"action"},{e:"🫧",l:"to slow down and breathe",v:"rest"},{e:"🤝",l:"to reach out to someone",v:"connect"},{e:"🪞",l:"to look inward",v:"reflect"}]},
+  { t:"Pick the image that calls to you right now.", o:[{e:"🌕",l:"a full moon over water",v:"moon"},{e:"🌿",l:"a path into the woods",v:"path"},{e:"🕯️",l:"a single candle flame",v:"flame"},{e:"🗝️",l:"an ornate golden key",v:"key"}]},
+  { t:"What are you carrying into today?", o:[{e:"💭",l:"unfinished thoughts",v:"anxious"},{e:"🌱",l:"quiet hope",v:"peaceful"},{e:"🔥",l:"real excitement",v:"energized"},{e:"🌫️",l:"a kind of fog",v:"tired"}]},
+  { t:"If today had a texture, it would be...", o:[{e:"🪨",l:"rough and resistant",v:"anxious"},{e:"🧸",l:"soft and forgiving",v:"peaceful"},{e:"⚡",l:"electric and alive",v:"energized"},{e:"🌊",l:"flowing and uncertain",v:"tired"}]},
+  { t:"What do you most need right now?", o:[{e:"🛏️",l:"genuine rest",v:"rest"},{e:"🗣️",l:"to be heard",v:"connect"},{e:"🎯",l:"a clear direction",v:"action"},{e:"🧘",l:"stillness inside",v:"reflect"}]},
+  { t:"How does your body feel this morning?", o:[{e:"💪",l:"strong and ready",v:"energized"},{e:"🌿",l:"gentle and soft",v:"peaceful"},{e:"😮‍💨",l:"heavy and slow",v:"tired"},{e:"🌀",l:"unsettled, restless",v:"anxious"}]},
+  { t:"What season does today feel like?", o:[{e:"🌸",l:"spring — new beginnings",v:"energized"},{e:"🍂",l:"autumn — letting go",v:"reflect"},{e:"❄️",l:"winter — going inward",v:"tired"},{e:"☀️",l:"summer — full bloom",v:"peaceful"}]},
+  { t:"Where is your mind right now?", o:[{e:"🌤️",l:"clear, mostly present",v:"peaceful"},{e:"🌪️",l:"spinning with thoughts",v:"anxious"},{e:"🌑",l:"somewhere far away",v:"tired"},{e:"🎆",l:"buzzing with ideas",v:"energized"}]},
+  { t:"What would feel like a win today?", o:[{e:"✅",l:"finishing something big",v:"action"},{e:"💌",l:"a real conversation",v:"connect"},{e:"🛁",l:"an hour just for me",v:"rest"},{e:"💡",l:"understanding something better",v:"reflect"}]},
+  { t:"Which animal energy do you feel today?", o:[{e:"🦁",l:"lion — bold and present",v:"energized"},{e:"🦉",l:"owl — watchful, wise",v:"reflect"},{e:"🐢",l:"turtle — slow and steady",v:"tired"},{e:"🦋",l:"butterfly — light and shifting",v:"peaceful"}]},
+  { t:"What's sitting in the back of your mind?", o:[{e:"❤️",l:"someone I care about",v:"connect"},{e:"📋",l:"something I keep putting off",v:"action"},{e:"🌀",l:"a question with no answer yet",v:"reflect"},{e:"😮‍💨",l:"nothing I can name",v:"tired"}]},
+  { t:"What time of day does your energy match?", o:[{e:"🌅",l:"golden hour — warm and still",v:"peaceful"},{e:"🕛",l:"midnight — restless and searching",v:"anxious"},{e:"☀️",l:"noon — sharp and full on",v:"energized"},{e:"🌆",l:"dusk — winding down",v:"tired"}]},
+  { t:"Pick a scent that speaks to your mood.", o:[{e:"🌹",l:"rose — soft, romantic",v:"peaceful"},{e:"🌿",l:"eucalyptus — clearing, sharp",v:"energized"},{e:"🪵",l:"cedar — grounded, quiet",v:"reflect"},{e:"🌧️",l:"petrichor — melancholy, deep",v:"tired"}]},
+  { t:"What does your heart want to say today?", o:[{e:"💬",l:"I need to talk to someone",v:"connect"},{e:"🤫",l:"I just want quiet",v:"rest"},{e:"🏃",l:"I need to do something",v:"action"},{e:"🌑",l:"I'm not sure yet",v:"reflect"}]},
+  { t:"If you were a weather system today, you'd be...", o:[{e:"⛈️",l:"a thunderstorm — electric",v:"anxious"},{e:"🌤️",l:"partly cloudy — managing",v:"tired"},{e:"🌞",l:"full sunshine — open",v:"energized"},{e:"🌫️",l:"soft fog — dreamy",v:"peaceful"}]},
+  { t:"What's the shape of today for you?", o:[{e:"📐",l:"angular — full of edges",v:"anxious"},{e:"⭕",l:"circular — soft and whole",v:"peaceful"},{e:"➡️",l:"an arrow — pointed, moving",v:"action"},{e:"〰️",l:"a wave — unpredictable",v:"tired"}]},
+  { t:"Which feels more true right now?", o:[{e:"🌊",l:"I'm going with the flow",v:"peaceful"},{e:"🏋️",l:"I'm pushing against something",v:"action"},{e:"🌀",l:"I'm caught in a loop",v:"anxious"},{e:"🛸",l:"I feel a little detached",v:"tired"}]},
+  { t:"What would be the kindest thing you could do for yourself today?", o:[{e:"😴",l:"actually rest",v:"rest"},{e:"📞",l:"call someone I love",v:"connect"},{e:"📓",l:"write it all out",v:"reflect"},{e:"🎯",l:"tackle the one big thing",v:"action"}]},
+  { t:"Which colour is your mood?", o:[{e:"🩷",l:"pink — tender, open",v:"peaceful"},{e:"🔵",l:"blue — calm and deep",v:"reflect"},{e:"🟡",l:"yellow — bright, a little nervous",v:"anxious"},{e:"🟠",l:"orange — warm and doing",v:"energized"}]},
+  { t:"Where do you feel today's tension?", o:[{e:"🫁",l:"in my chest — breath held",v:"anxious"},{e:"💤",l:"behind my eyes — fatigue",v:"tired"},{e:"🦴",l:"in my shoulders — carrying weight",v:"reflect"},{e:"🫀",l:"nowhere yet — I feel okay",v:"peaceful"}]},
+  { t:"What kind of energy surrounds you today?", o:[{e:"🌺",l:"warm and inviting",v:"connect"},{e:"⚔️",l:"charged, a little combative",v:"anxious"},{e:"🍵",l:"slow and nurturing",v:"rest"},{e:"🎪",l:"busy and colourful",v:"energized"}]},
+  { t:"If today were a film genre, it would be...", o:[{e:"🎭",l:"drama — intense, emotional",v:"anxious"},{e:"🎬",l:"coming-of-age — tender, searching",v:"reflect"},{e:"🎉",l:"feel-good — light and warm",v:"energized"},{e:"🧘",l:"slow cinema — quiet and observant",v:"peaceful"}]},
+  { t:"How honest are you being with yourself today?", o:[{e:"🪞",l:"painfully honest",v:"reflect"},{e:"😌",l:"mostly at peace with things",v:"peaceful"},{e:"🙈",l:"avoiding something",v:"tired"},{e:"💥",l:"confronting it head on",v:"action"}]},
+  { t:"What does your ideal today look like?", o:[{e:"🌄",l:"an adventure, even small",v:"energized"},{e:"🕰️",l:"slow, with nowhere to be",v:"rest"},{e:"🤲",l:"giving and receiving warmth",v:"connect"},{e:"📚",l:"learning something that matters",v:"reflect"}]},
+  { t:"How full is your cup right now?", o:[{e:"🥛",l:"full — I have lots to give",v:"energized"},{e:"🫙",l:"half — getting by fine",v:"peaceful"},{e:"🕳️",l:"empty — running on fumes",v:"tired"},{e:"💧",l:"just a drop — I need refilling",v:"rest"}]},
+  { t:"Which word lands closest to your mood?", o:[{e:"✨",l:"anticipation",v:"energized"},{e:"🌑",l:"melancholy",v:"tired"},{e:"🌀",l:"restlessness",v:"anxious"},{e:"🕊️",l:"acceptance",v:"peaceful"}]},
+  { t:"What are you most afraid of today?", o:[{e:"🚪",l:"missing an opportunity",v:"action"},{e:"💔",l:"disappointing someone",v:"connect"},{e:"🪞",l:"seeing something true in myself",v:"reflect"},{e:"😶",l:"nothing in particular",v:"peaceful"}]},
+  { t:"How do you want to move through today?", o:[{e:"🏃",l:"fast — there's momentum here",v:"action"},{e:"🚶",l:"steady — one thing at a time",v:"peaceful"},{e:"🧍",l:"still — pausing more than moving",v:"rest"},{e:"🌀",l:"spiralling — can't quite settle",v:"anxious"}]},
+  { t:"What feels unfinished?", o:[{e:"💬",l:"a conversation I need to have",v:"connect"},{e:"📋",l:"a task I keep delaying",v:"action"},{e:"🤔",l:"a thought I can't complete",v:"reflect"},{e:"💤",l:"sleep — I'm still catching up",v:"tired"}]},
+  { t:"Which of these calls to you most?", o:[{e:"🏔️",l:"a mountain peak at sunrise",v:"energized"},{e:"🛶",l:"a still lake at dusk",v:"peaceful"},{e:"🌌",l:"the open sky at night",v:"reflect"},{e:"🌧️",l:"rain on a window",v:"tired"}]},
+  { t:"What do you need permission to do today?", o:[{e:"😴",l:"rest without guilt",v:"rest"},{e:"💥",l:"be a little selfish",v:"action"},{e:"😢",l:"feel what I'm feeling",v:"reflect"},{e:"🎉",l:"be happy without explaining it",v:"peaceful"}]},
+  { t:"What's the undertone of your morning?", o:[{e:"🌸",l:"gentle hope",v:"peaceful"},{e:"🌩️",l:"low-grade dread",v:"anxious"},{e:"🕯️",l:"quiet determination",v:"action"},{e:"🛌",l:"reluctant awakening",v:"tired"}]},
+  { t:"What do you most want to let go of today?", o:[{e:"😤",l:"a grudge or resentment",v:"reflect"},{e:"📱",l:"distraction and noise",v:"rest"},{e:"😰",l:"fear of getting it wrong",v:"anxious"},{e:"🧱",l:"the need to have it all figured out",v:"peaceful"}]},
+  { t:"How are you showing up in your relationships today?", o:[{e:"🫂",l:"present and giving",v:"connect"},{e:"🪨",l:"a little closed off",v:"tired"},{e:"🤹",l:"stretching myself too thin",v:"anxious"},{e:"🌊",l:"going with whatever's needed",v:"peaceful"}]},
+  { t:"Which of these feels most like home right now?", o:[{e:"🌿",l:"a quiet garden",v:"peaceful"},{e:"📚",l:"a warm library",v:"reflect"},{e:"🎶",l:"a live music venue",v:"energized"},{e:"🛁",l:"a long bath, alone",v:"rest"}]},
+  { t:"What do you want the end of today to feel like?", o:[{e:"✅",l:"accomplished — I did something real",v:"action"},{e:"🥰",l:"connected — I wasn't alone",v:"connect"},{e:"😮‍💨",l:"lighter — I released something",v:"reflect"},{e:"😴",l:"rested — I actually took care of myself",v:"rest"}]},
+  { t:"If you could change one thing about today before it starts?", o:[{e:"⏰",l:"more time",v:"rest"},{e:"🧠",l:"a clearer head",v:"anxious"},{e:"💞",l:"better company",v:"connect"},{e:"⚡",l:"more energy",v:"tired"}]},
+  { t:"Pick a moon phase that matches your mood.", o:[{e:"🌑",l:"new moon — quiet, beginning",v:"peaceful"},{e:"🌓",l:"half moon — in progress",v:"action"},{e:"🌕",l:"full moon — heightened, visible",v:"anxious"},{e:"🌘",l:"waning — releasing, retreating",v:"tired"}]},
+  { t:"What do you want to remember about today?", o:[{e:"💛",l:"that I was kind to myself",v:"rest"},{e:"🌟",l:"that I tried something brave",v:"action"},{e:"🤍",l:"that I let someone in",v:"connect"},{e:"🌿",l:"that I stayed present",v:"peaceful"}]},
+  { t:"What's your relationship with uncertainty today?", o:[{e:"😤",l:"frustrated — I want answers",v:"anxious"},{e:"🤷",l:"accepting — it is what it is",v:"peaceful"},{e:"🕵️",l:"curious — let's see what unfolds",v:"energized"},{e:"😶‍🌫️",l:"numb — not engaging with it",v:"tired"}]},
+  { t:"Which emotion is closest to the surface?", o:[{e:"💛",l:"gratitude",v:"peaceful"},{e:"😤",l:"frustration",v:"anxious"},{e:"💔",l:"longing",v:"tired"},{e:"🔥",l:"determination",v:"energized"}]},
+  { t:"What would a wise older version of you say right now?", o:[{e:"🛑",l:"slow down, you're rushing",v:"rest"},{e:"💪",l:"you're stronger than you think",v:"action"},{e:"🤝",l:"let people help you",v:"connect"},{e:"🌱",l:"this is all part of it",v:"reflect"}]},
+  { t:"How does the air feel today?", o:[{e:"🌬️",l:"crisp and clarifying",v:"energized"},{e:"🌫️",l:"heavy and thick",v:"tired"},{e:"🌸",l:"warm and fragrant",v:"peaceful"},{e:"⚡",l:"charged, before a storm",v:"anxious"}]},
+  { t:"What does your intuition keep whispering?", o:[{e:"🗣️",l:"say the thing you've been avoiding",v:"action"},{e:"🚪",l:"it's time to walk away from something",v:"reflect"},{e:"🌱",l:"keep going — it's working",v:"energized"},{e:"🤫",l:"not today — wait",v:"rest"}]},
+  { t:"Which of these are you most hungry for?", o:[{e:"🌟",l:"recognition — to be seen",v:"connect"},{e:"🧭",l:"direction — to know the next step",v:"action"},{e:"🛏️",l:"softness — to just be held",v:"rest"},{e:"🔮",l:"clarity — to understand myself better",v:"reflect"}]},
+  { t:"What is today quietly teaching you?", o:[{e:"🌊",l:"how to surrender",v:"peaceful"},{e:"🔥",l:"how to want things",v:"energized"},{e:"🌑",l:"how to sit with discomfort",v:"reflect"},{e:"🌱",l:"how to begin again",v:"tired"}]},
+  { t:"Pick the element that feels most alive in you today.", o:[{e:"🔥",l:"fire — passionate, consuming",v:"energized"},{e:"💧",l:"water — flowing, emotional",v:"peaceful"},{e:"🌍",l:"earth — grounded, patient",v:"reflect"},{e:"💨",l:"air — restless, thinking",v:"anxious"}]},
+  { t:"How do you want to be remembered by tonight?", o:[{e:"🌟",l:"as someone who showed up fully",v:"action"},{e:"🤍",l:"as someone who was gentle",v:"rest"},{e:"🌿",l:"as someone who was present",v:"peaceful"},{e:"💬",l:"as someone who really listened",v:"connect"}]},
+  { t:"What does silence feel like for you today?", o:[{e:"🕊️",l:"peaceful — I could live in it",v:"peaceful"},{e:"😟",l:"uncomfortable — I need noise",v:"anxious"},{e:"💤",l:"heavy — I might fall asleep",v:"tired"},{e:"💡",l:"alive — ideas are forming",v:"reflect"}]},
+];
+
+// Pick 3 daily questions from seed
+function pickDailyQuestions() {
+  const used = new Set();
+  const result = [];
+  let s = DAY_SEED * 7;
+  while (result.length < 3) {
+    s = Math.floor(sr(s) * QB.length + s) % QB.length;
+    if (s < 0) s += QB.length;
+    if (!used.has(s)) { used.add(s); result.push(QB[s]); }
+    s++;
   }
+  return result;
+}
+
+const todayQs = pickDailyQuestions();
+todayQs.forEach((q, i) => {
+  document.getElementById(`qText${i}`).textContent = q.t;
+  document.getElementById(`qOpts${i}`).innerHTML = q.o.map(o =>
+    `<button class="option-btn" onclick="answer(${i},'${o.v}')"><span><span class="option-emoji">${o.e}</span>${o.l}</span></button>`
+  ).join('');
+});
+
+// ── Cards ─────────────────────────────────────────────────────────────────────
+const CARDS = {
+  energized:{ name:'The Sun',            symbol:'☀️', color:['#f9d77e','#e8a634'], meaning:'vitality' },
+  tired:    { name:'The Moon',           symbol:'🌙', color:['#8fa6c8','#5a7a9e'], meaning:'intuition' },
+  anxious:  { name:'The Tower',          symbol:'⚡', color:['#c97d6e','#9e4f3e'], meaning:'change' },
+  peaceful: { name:'The Star',           symbol:'✨', color:['#9bbaa8','#5e8a72'], meaning:'hope' },
+  action:   { name:'The Chariot',        symbol:'🏹', color:['#c9a96e','#9e7a3e'], meaning:'momentum' },
+  rest:     { name:'The Hermit',         symbol:'🕯️', color:['#9b8ea8','#6e5e7a'], meaning:'solitude' },
+  connect:  { name:'The Lovers',         symbol:'🌹', color:['#e8c4b0','#c97d6e'], meaning:'connection' },
+  reflect:  { name:'The High Priestess', symbol:'🌀', color:['#a8b4c8','#6e7e9a'], meaning:'wisdom' },
+  moon:     { name:'The Moon',           symbol:'🌕', color:['#8fa6c8','#4a6a8e'], meaning:'mystery' },
+  path:     { name:'The Fool',           symbol:'🍃', color:['#9bbaa8','#4e7a62'], meaning:'adventure' },
+  flame:    { name:'Strength',           symbol:'🔥', color:['#e8a66e','#c97d3e'], meaning:'courage' },
+  key:      { name:'The Emperor',        symbol:'🗝️', color:['#c9a96e','#8e6a2e'], meaning:'power' },
 };
 
+const SHADOWS = [
+  { name:'The Shadow',    symbol:'🌑', color:['#4a3540','#2d1f26'], warning:'Something unexamined is asking for your attention today.' },
+  { name:'The Veil',      symbol:'🕸️', color:['#3d3050','#2a1f38'], warning:'You may be seeing what you want to see, not what is.' },
+  { name:'The Thorn',     symbol:'🥀', color:['#503040','#332030'], warning:'An old wound may be colouring how you move through today.' },
+  { name:'The Labyrinth', symbol:'🌀', color:['#304050','#1f2a38'], warning:'The pattern you keep repeating wants to be broken.' },
+  { name:'The Ember',     symbol:'🔥', color:['#503020','#382010'], warning:'Something you\'ve been suppressing is still burning underneath.' },
+  { name:'The Fog',       symbol:'🌫️', color:['#405060','#2a3840'], warning:'Clarity is available — but only if you stop moving for a moment.' },
+];
+
 const READINGS = {
-  morning_action: "Today has an electric charge to it. You woke up ready, and the universe is ready for you right back. The energy you're carrying right now is not accidental — it's aligned.",
-  morning_rest:   "The day is asking you to move, but your body is whispering to slow down first. That tension is actually your wisdom speaking. Honor it before you push forward.",
-  morning_connect: "There's someone you've been thinking about — a text you've been meaning to send, a conversation you've put off. Today, that thread wants to be picked up.",
-  morning_reflect: "You're being asked to look at something honestly today. Not harshly — just clearly. The answer you've been circling around already lives inside you.",
-  tired_action:   "You're being asked to move even before you feel ready. Trust that the momentum will build as you go. The first step is always the hardest to take on low energy.",
-  tired_rest:     "Your body is telling you something important. Rest is not a pause from your life — it is part of it. Today, ease is the right choice.",
-  tired_connect:  "Reaching out when you're tired can feel impossible, but sometimes it's the one thing that fills you back up. Let someone in today.",
-  tired_reflect:  "There's beauty in the in-between. You're not stuck — you're processing. Give yourself the time to sit with what's shifting.",
-  anxious_action: "That restless feeling? Channel it. Anxiety and excitement live in the same body. You have more momentum available to you right now than you realize.",
-  anxious_rest:   "The spiral will slow if you let it. Find one small thing you can soften today — one breath, one gentle choice. That's enough.",
-  anxious_connect: "Carrying something alone makes it heavier. You don't have to explain everything — just let someone sit beside you today.",
-  anxious_reflect: "What you're feeling is information, not a verdict. Sit with the question today rather than rushing to answer it.",
-  peaceful_action: "From a place of peace, you can act with real clarity. Today's decisions made from this calm will be ones you feel good about.",
-  peaceful_rest:   "What a rare and precious thing — to begin a day already at ease. Protect this. You don't have to fill it with noise.",
-  peaceful_connect: "Peace radiates. The people around you will feel it. Today, you have something to give simply by being present.",
-  peaceful_reflect: "You're in the perfect state for insight. Something about your life is ready to be seen differently today.",
+  energized_action:"Today has an electric charge to it. You woke up ready, and the universe is ready for you right back. Don't second-guess what you're feeling — the energy you're carrying is not accidental, it's aligned.",
+  energized_rest:"You have the energy, but today is quietly asking you to save some of it. Not everything needs to be consumed at full force. The most powerful thing you can do right now might be to choose what not to spend yourself on.",
+  energized_connect:"Your light is particularly bright today. Someone in your orbit needs to feel it — a message, a presence, a moment of your full attention. Don't keep it to yourself; warmth given freely always finds its way back.",
+  energized_reflect:"Energy without direction can scatter. Today, turn that brightness inward — sit with a question you've been too busy to ask yourself. What you find in the quiet may surprise you more than anything the outside world could offer.",
+  tired_action:"You're being asked to move even before you feel ready. Trust that the momentum will build as you go — it always does. The first step is the only one you need to take right now.",
+  tired_rest:"Your body is telling you something important, and it's worth listening to. Rest is not a pause from your life — it is part of it, woven in just as much as the doing. Today, ease is not giving up; it's the right choice.",
+  tired_connect:"Reaching out when you're tired can feel impossible, but sometimes it's the one thing that fills you back up. You don't have to perform or explain — just let someone sit beside you. Presence shared is presence restored.",
+  tired_reflect:"There's beauty in the in-between, even if it doesn't feel like it right now. You're not stuck — you're processing something that needs time to settle. Give yourself permission to not have it figured out yet.",
+  anxious_action:"That restless feeling? Channel it — don't fight it. Anxiety and excitement live in the same body, and right now yours is charged with something that can move. You have more momentum available to you than you realise.",
+  anxious_rest:"The spiral will slow if you let it. Find one small thing you can soften today — one breath, one gentle choice, one moment where you don't push back. That is not weakness; that is the whole practice.",
+  anxious_connect:"Carrying something alone makes it heavier than it needs to be. You don't have to explain everything or have the words perfectly right — just let someone sit beside you today. The weight of things shared is always lighter.",
+  anxious_reflect:"What you're feeling is information, not a verdict. Sit with the question today rather than rushing to answer it — sometimes the discomfort is pointing at exactly the thing worth understanding. You have time.",
+  peaceful_action:"From a place of peace, you can act with real clarity. Today's decisions made from this calm will be ones you feel good about looking back. Move forward, but carry this stillness with you as you do.",
+  peaceful_rest:"What a rare and precious thing — to begin a day already at ease. Protect this; don't let noise or obligation chip away at it before you've had the chance to really feel it. You don't have to fill every quiet moment.",
+  peaceful_connect:"Peace radiates without you having to do anything. The people around you will feel it simply by being near you today. You have something to give just by being present — don't underestimate that.",
+  peaceful_reflect:"You're in the perfect state for insight today. Something about your life is ready to be seen differently, and the clarity you have right now is the right lens for it. Let yourself think the thought you've been circling.",
 };
 
 const AFFIRMATIONS = [
@@ -620,96 +351,95 @@ const AFFIRMATIONS = [
   "your softness is not a weakness, it's a gift",
   "something is turning in your favour, even now",
   "you've made it through 100% of your hard days so far",
+  "the right things are finding their way to you",
+  "you are allowed to take up space today",
+  "not every day has to mean something — some can just be lived",
+  "your pace is the right pace",
 ];
 
-function answer(q, val) {
-  const keys = ['morning','ask','image'];
-  answers[keys[q]] = val;
-  currentQ++;
+// ── Answer flow ───────────────────────────────────────────────────────────────
+const answers = [];
+let currentQ = 0;
 
+function answer(q, val) {
+  answers[q] = val;
+  currentQ++;
   if (currentQ < 3) {
-    const cards = document.querySelectorAll('.question-card');
-    cards[q].classList.remove('active');
-    cards[currentQ].classList.add('active');
+    document.getElementById(`qCard${q}`).classList.remove('active');
+    document.getElementById(`qCard${currentQ}`).classList.add('active');
   } else {
-    showLoading();
+    document.getElementById('questionFlow').style.display = 'none';
+    document.getElementById('loading').style.display = 'flex';
+    setTimeout(showResults, 4800);
   }
 }
 
-function showLoading() {
-  document.getElementById('questionFlow').style.display = 'none';
-  const loading = document.getElementById('loading');
-  loading.style.display = 'flex';
-  setTimeout(showResults, 2200);
-}
-
+// ── Results ───────────────────────────────────────────────────────────────────
 function showResults() {
   document.getElementById('loading').style.display = 'none';
 
-  const c1 = CARDS.morning[answers.morning];
-  const c2 = CARDS.ask[answers.ask];
-  const c3 = CARDS.image[answers.image];
+  const c1 = CARDS[answers[0]];
+  const c2 = CARDS[answers[1]];
+  const c3 = CARDS[answers[2]];
+  const shadow = SHADOWS[Math.floor(sr(DAY_SEED + 99) * SHADOWS.length)];
+  const reading = READINGS[`${answers[0]}_${answers[1]}`] || "Today holds something unexpected. Stay open — not everything needs to be understood right away.";
+  const affirmation = AFFIRMATIONS[Math.floor(sr(DAY_SEED + 55) * AFFIRMATIONS.length)];
 
-  const readingKey = `${answers.morning}_${answers.ask}`;
-  const reading = READINGS[readingKey] || "Today holds something unexpected. The cards are asking you to stay open — not everything needs to be understood right away.";
-  const affirmation = AFFIRMATIONS[Math.floor(Math.random() * AFFIRMATIONS.length)];
-
-  const themeColor = c2.color[0];
-
-  const resultsEl = document.getElementById('results');
-  resultsEl.innerHTML = `
+  document.getElementById('results').innerHTML = `
     <div class="result-header">
       <p class="result-eyebrow">✦ your reading ✦</p>
-      <h2 class="result-title">today is a day of <em>${c2.meaning}</em></h2>
+      <h2 class="result-title">today holds <em>${c2.meaning}</em></h2>
     </div>
-
     <div class="cards-row">
-      ${makeCard(c1, 'morning energy', -4)}
-      ${makeCard(c2, "what today asks", 0)}
-      ${makeCard(c3, 'your intuition', 4)}
+      ${card(c1,'morning energy',-5)}
+      ${card(c2,'today asks',-1.5)}
+      ${card(c3,'your intuition',2)}
+      ${shadowCard(shadow)}
     </div>
-
     <div class="reading-sections">
       <div class="reading-section">
         <p class="section-label">✦ the message</p>
         <p class="section-body">${reading}</p>
       </div>
-
-      <div class="reading-section" style="display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap;">
-        ${[c1,c2,c3].map(c => `
-          <div style="flex:1; min-width:120px;">
-            <p class="section-label">✦ ${c.name}</p>
-            <p class="section-body"><em>${c.meaning}</em> — this card invites you to hold its energy gently throughout the day.</p>
-          </div>
-        `).join('')}
+      <div class="reading-section" style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;">
+        ${[c1,c2,c3].map(c=>`<div style="flex:1;min-width:100px;"><p class="section-label">✦ ${c.name}</p><p class="section-body"><em>${c.meaning}</em> — hold this energy gently throughout the day.</p></div>`).join('')}
       </div>
-
-      <div class="reading-section" style="background: linear-gradient(135deg, ${c1.color[1]}22, ${c3.color[1]}22);">
-        <p class="section-label">✦ a small practice for today</p>
+      <div class="reading-section shadow-section">
+        <p class="section-label">✦ shadow card — ${shadow.name}</p>
+        <p class="section-body">${shadow.warning}</p>
+      </div>
+      <div class="reading-section" style="background:linear-gradient(135deg,${c1.color[1]}18,${c3.color[1]}18);">
+        <p class="section-label">✦ a small practice</p>
         <p class="section-body">Before you sleep tonight, write down one moment where you felt like yourself. Just one sentence. Let the cards have done their work.</p>
       </div>
     </div>
-
     <div class="affirmation">"${affirmation}"</div>
-
-    <button class="again-btn" onclick="location.reload()">✦ draw again tomorrow</button>
-  `;
-
-  resultsEl.style.display = 'flex';
-}
-
-function makeCard(card, position, rotate) {
-  const [c1, c2] = card.color;
-  return `
-    <div class="tarot-card" style="transform: rotate(${rotate}deg);">
-      <div class="card-face" style="background: linear-gradient(160deg, ${c1}, ${c2});">
-        <span class="card-position-label">${position}</span>
-        <span class="card-symbol">${card.symbol}</span>
-        <span class="card-name">${card.name}</span>
-      </div>
+    <div class="btn-row">
+      <button class="again-btn" onclick="location.reload()">↩ draw again</button>
     </div>
   `;
+  document.getElementById('results').style.display = 'flex';
 }
+
+function card(c, pos, rot) {
+  return `<div class="tarot-card" style="transform:rotate(${rot}deg);">
+    <div class="card-face" style="background:linear-gradient(160deg,${c.color[0]},${c.color[1]});">
+      <span class="card-position-label">${pos}</span>
+      <span class="card-symbol">${c.symbol}</span>
+      <span class="card-name">${c.name}</span>
+    </div></div>`;
+}
+
+function shadowCard(s) {
+  return `<div class="tarot-card shadow" style="transform:rotate(5.5deg);">
+    <div class="card-face" style="background:linear-gradient(160deg,${s.color[0]},${s.color[1]});">
+      <span class="card-position-label">shadow</span>
+      <span class="card-symbol">${s.symbol}</span>
+      <span class="card-name">${s.name}</span>
+      <span class="card-reversed">reversed</span>
+    </div></div>`;
+}
+
 </script>
 </body>
 </html>
