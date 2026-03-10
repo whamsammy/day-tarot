@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>your day in tarot ✦</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #faf6f0;
+    --warm: #fae4ea;
+    --blush: #f4b8cc;
+    --rose: #e0527a;
+    --sage: #a8c4b8;
+    --dusty: #d4a0bc;
+    --gold: #e07898;
+    --ink: #2d1f26;
+    --soft-ink: #5c3f4e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--cream);
+    color: var(--ink);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='4' fill='%23e07898' opacity='0.8'/%3E%3C/svg%3E") 10 10, auto;
+  }
+
+  /* Texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Decorative blobs */
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .blob-1 { width: 400px; height: 400px; background: #f0d8e0; top: -100px; right: -100px; }
+  .blob-2 { width: 300px; height: 300px; background: #e8c8d8; bottom: 100px; left: -80px; }
+  .blob-3 { width: 200px; height: 200px; background: #f5e0e8; top: 40%; right: 10%; }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px 80px;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-weight: 400;
+    font-size: 11px;
+    color: var(--rose);
+    letter-spacing: 0.2em;
+    text-transform: lowercase;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(42px, 8vw, 72px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--ink);
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--rose);
+  }
+
+  .subtitle {
+    margin-top: 12px;
+    font-family: 'Space Mono', monospace;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--soft-ink);
+    opacity: 0.7;
+    letter-spacing: 0.08em;
+  }
+
+  /* Stars decoration */
+  .stars {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 16px 0;
+    color: var(--gold);
+    font-size: 18px;
+    letter-spacing: 4px;
+  }
+
+  /* Question flow */
+  .question-flow {
+    width: 100%;
+    max-width: 560px;
+    animation: fadeUp 0.9s 0.1s ease both;
+  }
+
+  .question-card {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  .question-card.active { display: flex; animation: fadeIn 0.5s ease both; }
+
+  .q-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .q-text {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(15px, 3vw, 19px);
+    text-align: center;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .option-btn {
+    background: white;
+    border: 1.5px solid rgba(45,38,32,0.12);
+    border-radius: 18px;
+    padding: 16px 14px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: center;
+    line-height: 1.4;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .option-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--blush), var(--dusty));
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .option-btn:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  }
+
+  .option-btn:hover::before { opacity: 0.08; }
+
+  .option-btn span {
+    position: relative;
+    z-index: 1;
+    display: block;
+  }
+
+  .option-emoji {
+    font-size: 24px;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  /* Progress dots */
+  .progress-dots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(45,38,32,0.15);
+    transition: all 0.3s ease;
+  }
+  .dot.filled { background: var(--gold); transform: scale(1.2); }
+
+  /* Loading state */
+  #loading {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 40px;
+    animation: fadeIn 0.5s ease both;
+  }
+
+  .card-shuffle {
+    display: flex;
+    gap: -10px;
+    position: relative;
+    height: 100px;
+    width: 200px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .mini-card {
+    width: 50px;
+    height: 80px;
+    border-radius: 8px;
+    position: absolute;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+
+  .mini-card:nth-child(1) {
+    background: linear-gradient(145deg, #f4b8cc, #e0527a);
+    animation: shuffle1 1.8s ease-in-out infinite;
+    z-index: 3;
+  }
+  .mini-card:nth-child(2) {
+    background: linear-gradient(145deg, #f9d0df, #d4a0bc);
+    animation: shuffle2 1.8s 0.2s ease-in-out infinite;
+    z-index: 2;
+  }
+  .mini-card:nth-child(3) {
+    background: linear-gradient(145deg, #e8b0cc, #c4729a);
+    animation: shuffle3 1.8s 0.4s ease-in-out infinite;
+    z-index: 1;
+  }
+
+  @keyframes shuffle1 { 0%,100%{transform:rotate(-15deg) translateX(-20px)} 50%{transform:rotate(5deg) translateX(10px) translateY(-10px)} }
+  @keyframes shuffle2 { 0%,100%{transform:rotate(0deg) translateX(0)} 50%{transform:rotate(-10deg) translateX(-15px) translateY(5px)} }
+  @keyframes shuffle3 { 0%,100%{transform:rotate(12deg) translateX(20px)} 50%{transform:rotate(-5deg) translateX(5px) translateY(-8px)} }
+
+  .loading-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--soft-ink);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  /* Results */
+  #results {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    width: 100%;
+    max-width: 640px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .result-header {
+    text-align: center;
+  }
+
+  .result-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .result-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 6vw, 46px);
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 8px 0;
+  }
+
+  /* Card display */
+  .cards-row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .tarot-card {
+    width: 160px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    animation: cardReveal 0.5s ease both;
+    flex-shrink: 0;
+  }
+
+  .tarot-card:nth-child(1) { animation-delay: 0.1s; transform-origin: bottom center; }
+  .tarot-card:nth-child(2) { animation-delay: 0.3s; }
+  .tarot-card:nth-child(3) { animation-delay: 0.5s; }
+
+  @keyframes cardReveal {
+    from { opacity: 0; transform: translateY(30px) rotate(-3deg); }
+    to { opacity: 1; transform: translateY(0) rotate(0deg); }
+  }
+
+  .card-face {
+    height: 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    padding: 16px;
+  }
+
+  .card-symbol {
+    font-size: 52px;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1));
+  }
+
+  .card-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    text-align: center;
+    color: white;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    letter-spacing: 0.05em;
+  }
+
+  .card-position-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+  }
+
+  /* Decorative border on cards */
+  .card-face::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 10px;
+    pointer-events: none;
+  }
+
+  /* Reading sections */
+  .reading-sections {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .reading-section {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+    animation: fadeUp 0.5s ease both;
+    border: 1px solid rgba(45,38,32,0.07);
+  }
+
+  .reading-section:nth-child(1) { animation-delay: 0.6s; }
+  .reading-section:nth-child(2) { animation-delay: 0.75s; }
+  .reading-section:nth-child(3) { animation-delay: 0.9s; }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .section-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: var(--ink);
+  }
+
+  .section-body {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    line-height: 1.75;
+    color: var(--soft-ink);
+  }
+
+  .section-body em {
+    font-style: italic;
+    color: var(--rose);
+  }
+
+  /* Affirmation pill */
+  .affirmation {
+    background: linear-gradient(135deg, var(--ink), #3d3028);
+    color: var(--cream);
+    border-radius: 100px;
+    padding: 14px 28px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    text-align: center;
+    letter-spacing: 0.02em;
+    animation: fadeUp 0.5s 1s ease both;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+
+  /* Reload button */
+  .again-btn {
+    background: transparent;
+    border: 1.5px solid var(--ink);
+    border-radius: 100px;
+    padding: 12px 32px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.25s;
+    animation: fadeUp 0.5s 1.1s ease both;
+  }
+  .again-btn:hover {
+    background: var(--ink);
+    color: var(--cream);
+    transform: scale(1.02);
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  /* Footer */
+  footer {
+    margin-top: 60px;
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--soft-ink);
+    opacity: 0.5;
+    animation: fadeIn 1s 0.5s ease both;
+  }
+
+  /* Mobile */
+  @media (max-width: 480px) {
+    .options-grid { grid-template-columns: 1fr; }
+    .cards-row { gap: 10px; }
+    .tarot-card { width: 130px; }
+    .card-face { height: 200px; }
+    .card-symbol { font-size: 40px; }
+  }
+</style>
+</head>
+<body>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<div class="page">
+  <header>
+    <p class="eyebrow">✦ a little divination ✦</p>
+    <h1>your day<br>in <em>tarot</em></h1>
+    <div class="stars">✦ ✧ ✦</div>
+    <p class="subtitle">three cards, drawn just for today</p>
+  </header>
+
+  <!-- Questions -->
+  <div class="question-flow" id="questionFlow">
+
+    <div class="question-card active" data-q="0">
+      <p class="q-label">question 1 of 3</p>
+      <p class="q-text">How did you wake up this morning?</p>
+      <div class="options-grid">
+        <button class="option-btn" onclick="answer(0,'energized')"><span><span class="option-emoji">☀️</span>ready to take on the world</span></button>
+        <button class="option-btn" onclick="answer(0,'tired')"><span><span class="option-emoji">🌙</span>still half in a dream</span></button>
+        <button class="option-btn" onclick="answer(0,'anxious')"><span><span class="option-emoji">🌀</span>with something on my mind</span></button>
+        <button class="option-btn" onclick="answer(0,'peaceful')"><span><span class="option-emoji">🍃</span>slow and peaceful</span></button>
+      </div>
+      <div class="progress-dots">
+        <div class="dot filled"></div><div class="dot"></div><div class="dot"></div>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="1">
+      <p class="q-label">question 2 of 3</p>
+      <p class="q-text">What does today feel like it's asking of you?</p>
+      <div class="options-grid">
+        <button class="option-btn" onclick="answer(1,'action')"><span><span class="option-emoji">⚡</span>to move, decide, act</span></button>
+        <button class="option-btn" onclick="answer(1,'rest')"><span><span class="option-emoji">🫧</span>to slow down and breathe</span></button>
+        <button class="option-btn" onclick="answer(1,'connect')"><span><span class="option-emoji">🤝</span>to reach out to someone</span></button>
+        <button class="option-btn" onclick="answer(1,'reflect')"><span><span class="option-emoji">🪞</span>to look inward</span></button>
+      </div>
+      <div class="progress-dots">
+        <div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div>
+      </div>
+    </div>
+
+    <div class="question-card" data-q="2">
+      <p class="q-label">question 3 of 3</p>
+      <p class="q-text">Pick the image that calls to you right now.</p>
+      <div class="options-grid">
+        <button class="option-btn" onclick="answer(2,'moon')"><span><span class="option-emoji">🌕</span>a full moon over water</span></button>
+        <button class="option-btn" onclick="answer(2,'path')"><span><span class="option-emoji">🌿</span>a path into the woods</span></button>
+        <button class="option-btn" onclick="answer(2,'flame')"><span><span class="option-emoji">🕯️</span>a single candle flame</span></button>
+        <button class="option-btn" onclick="answer(2,'key')"><span><span class="option-emoji">🗝️</span>an ornate golden key</span></button>
+      </div>
+      <div class="progress-dots">
+        <div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Loading -->
+  <div id="loading">
+    <div class="card-shuffle">
+      <div class="mini-card"></div>
+      <div class="mini-card"></div>
+      <div class="mini-card"></div>
+    </div>
+    <p class="loading-text">reading the cards for you...</p>
+  </div>
+
+  <!-- Results -->
+  <div id="results"></div>
+</div>
+
+<footer>made with care ✦ refresh for a new reading</footer>
+
+<script>
+const answers = {};
+let currentQ = 0;
+
+const CARDS = {
+  morning: {
+    energized:  { name: 'The Sun',        symbol: '☀️', color: ['#f9d77e','#e8a634'], meaning: 'vitality' },
+    tired:      { name: 'The Moon',       symbol: '🌙', color: ['#8fa6c8','#5a7a9e'], meaning: 'intuition' },
+    anxious:    { name: 'The Tower',      symbol: '⚡', color: ['#c97d6e','#9e4f3e'], meaning: 'change' },
+    peaceful:   { name: 'The Star',       symbol: '✨', color: ['#9bbaa8','#5e8a72'], meaning: 'hope' },
+  },
+  ask: {
+    action:     { name: 'The Chariot',   symbol: '🏹', color: ['#c9a96e','#9e7a3e'], meaning: 'momentum' },
+    rest:       { name: 'The Hermit',    symbol: '🕯️', color: ['#9b8ea8','#6e5e7a'], meaning: 'solitude' },
+    connect:    { name: 'The Lovers',    symbol: '🌹', color: ['#e8c4b0','#c97d6e'], meaning: 'connection' },
+    reflect:    { name: 'The High Priestess', symbol: '🌀', color: ['#a8b4c8','#6e7e9a'], meaning: 'wisdom' },
+  },
+  image: {
+    moon:       { name: 'The Moon',      symbol: '🌕', color: ['#8fa6c8','#4a6a8e'], meaning: 'mystery' },
+    path:       { name: 'The Fool',      symbol: '🍃', color: ['#9bbaa8','#4e7a62'], meaning: 'adventure' },
+    flame:      { name: 'Strength',      symbol: '🔥', color: ['#e8a66e','#c97d3e'], meaning: 'courage' },
+    key:        { name: 'The Emperor',   symbol: '🗝️', color: ['#c9a96e','#8e6a2e'], meaning: 'power' },
+  }
+};
+
+const READINGS = {
+  morning_action: "Today has an electric charge to it. You woke up ready, and the universe is ready for you right back. The energy you're carrying right now is not accidental — it's aligned.",
+  morning_rest:   "The day is asking you to move, but your body is whispering to slow down first. That tension is actually your wisdom speaking. Honor it before you push forward.",
+  morning_connect: "There's someone you've been thinking about — a text you've been meaning to send, a conversation you've put off. Today, that thread wants to be picked up.",
+  morning_reflect: "You're being asked to look at something honestly today. Not harshly — just clearly. The answer you've been circling around already lives inside you.",
+  tired_action:   "You're being asked to move even before you feel ready. Trust that the momentum will build as you go. The first step is always the hardest to take on low energy.",
+  tired_rest:     "Your body is telling you something important. Rest is not a pause from your life — it is part of it. Today, ease is the right choice.",
+  tired_connect:  "Reaching out when you're tired can feel impossible, but sometimes it's the one thing that fills you back up. Let someone in today.",
+  tired_reflect:  "There's beauty in the in-between. You're not stuck — you're processing. Give yourself the time to sit with what's shifting.",
+  anxious_action: "That restless feeling? Channel it. Anxiety and excitement live in the same body. You have more momentum available to you right now than you realize.",
+  anxious_rest:   "The spiral will slow if you let it. Find one small thing you can soften today — one breath, one gentle choice. That's enough.",
+  anxious_connect: "Carrying something alone makes it heavier. You don't have to explain everything — just let someone sit beside you today.",
+  anxious_reflect: "What you're feeling is information, not a verdict. Sit with the question today rather than rushing to answer it.",
+  peaceful_action: "From a place of peace, you can act with real clarity. Today's decisions made from this calm will be ones you feel good about.",
+  peaceful_rest:   "What a rare and precious thing — to begin a day already at ease. Protect this. You don't have to fill it with noise.",
+  peaceful_connect: "Peace radiates. The people around you will feel it. Today, you have something to give simply by being present.",
+  peaceful_reflect: "You're in the perfect state for insight. Something about your life is ready to be seen differently today.",
+};
+
+const AFFIRMATIONS = [
+  "you are allowed to change your mind at any point",
+  "what you're feeling right now is completely valid",
+  "you don't have to earn rest — it's already yours",
+  "the version of you from last year would be amazed",
+  "you are not behind, you are exactly on time",
+  "your softness is not a weakness, it's a gift",
+  "something is turning in your favour, even now",
+  "you've made it through 100% of your hard days so far",
+];
+
+function answer(q, val) {
+  const keys = ['morning','ask','image'];
+  answers[keys[q]] = val;
+  currentQ++;
+
+  if (currentQ < 3) {
+    const cards = document.querySelectorAll('.question-card');
+    cards[q].classList.remove('active');
+    cards[currentQ].classList.add('active');
+  } else {
+    showLoading();
+  }
+}
+
+function showLoading() {
+  document.getElementById('questionFlow').style.display = 'none';
+  const loading = document.getElementById('loading');
+  loading.style.display = 'flex';
+  setTimeout(showResults, 2200);
+}
+
+function showResults() {
+  document.getElementById('loading').style.display = 'none';
+
+  const c1 = CARDS.morning[answers.morning];
+  const c2 = CARDS.ask[answers.ask];
+  const c3 = CARDS.image[answers.image];
+
+  const readingKey = `${answers.morning}_${answers.ask}`;
+  const reading = READINGS[readingKey] || "Today holds something unexpected. The cards are asking you to stay open — not everything needs to be understood right away.";
+  const affirmation = AFFIRMATIONS[Math.floor(Math.random() * AFFIRMATIONS.length)];
+
+  const themeColor = c2.color[0];
+
+  const resultsEl = document.getElementById('results');
+  resultsEl.innerHTML = `
+    <div class="result-header">
+      <p class="result-eyebrow">✦ your reading ✦</p>
+      <h2 class="result-title">today is a day of <em>${c2.meaning}</em></h2>
+    </div>
+
+    <div class="cards-row">
+      ${makeCard(c1, 'morning energy', -4)}
+      ${makeCard(c2, "what today asks", 0)}
+      ${makeCard(c3, 'your intuition', 4)}
+    </div>
+
+    <div class="reading-sections">
+      <div class="reading-section">
+        <p class="section-label">✦ the message</p>
+        <p class="section-body">${reading}</p>
+      </div>
+
+      <div class="reading-section" style="display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap;">
+        ${[c1,c2,c3].map(c => `
+          <div style="flex:1; min-width:120px;">
+            <p class="section-label">✦ ${c.name}</p>
+            <p class="section-body"><em>${c.meaning}</em> — this card invites you to hold its energy gently throughout the day.</p>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="reading-section" style="background: linear-gradient(135deg, ${c1.color[1]}22, ${c3.color[1]}22);">
+        <p class="section-label">✦ a small practice for today</p>
+        <p class="section-body">Before you sleep tonight, write down one moment where you felt like yourself. Just one sentence. Let the cards have done their work.</p>
+      </div>
+    </div>
+
+    <div class="affirmation">"${affirmation}"</div>
+
+    <button class="again-btn" onclick="location.reload()">✦ draw again tomorrow</button>
+  `;
+
+  resultsEl.style.display = 'flex';
+}
+
+function makeCard(card, position, rotate) {
+  const [c1, c2] = card.color;
+  return `
+    <div class="tarot-card" style="transform: rotate(${rotate}deg);">
+      <div class="card-face" style="background: linear-gradient(160deg, ${c1}, ${c2});">
+        <span class="card-position-label">${position}</span>
+        <span class="card-symbol">${card.symbol}</span>
+        <span class="card-name">${card.name}</span>
+      </div>
+    </div>
+  `;
+}
+</script>
+</body>
+</html>
