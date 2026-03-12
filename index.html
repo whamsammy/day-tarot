@@ -112,10 +112,6 @@
     flex-shrink: 0;
     position: relative;
   }
-  .tarot-card:nth-child(1) { animation-delay: 0.08s; }
-  .tarot-card:nth-child(2) { animation-delay: 0.22s; }
-  .tarot-card:nth-child(3) { animation-delay: 0.36s; }
-  .tarot-card:nth-child(4) { animation-delay: 0.50s; }
   .tarot-card.is-reversed .card-inner { filter: saturate(0.65) brightness(0.82); }
   .tarot-card.is-shadow { opacity: 0.88; }
   .tarot-card.is-shadow .card-inner { filter: saturate(0.28) brightness(0.72); }
@@ -123,6 +119,28 @@
     from { opacity: 0; transform: translateY(36px) rotate(-4deg) scale(0.94); }
     to   { opacity: 1; transform: translateY(0) rotate(var(--card-rot, 0deg)) scale(1); }
   }
+
+  @keyframes float1 {
+    0%,100% { transform: rotate(var(--card-rot)) translateY(0px); }
+    50%      { transform: rotate(calc(var(--card-rot) + 0.8deg)) translateY(-5px); }
+  }
+  @keyframes float2 {
+    0%,100% { transform: rotate(var(--card-rot)) translateY(-3px); }
+    50%      { transform: rotate(calc(var(--card-rot) - 0.6deg)) translateY(3px); }
+  }
+  @keyframes float3 {
+    0%,100% { transform: rotate(var(--card-rot)) translateY(0px); }
+    50%      { transform: rotate(calc(var(--card-rot) + 0.5deg)) translateY(-4px); }
+  }
+  @keyframes float4 {
+    0%,100% { transform: rotate(var(--card-rot)) translateY(-2px); }
+    50%      { transform: rotate(calc(var(--card-rot) - 0.9deg)) translateY(4px); }
+  }
+
+  .tarot-card:nth-child(1) { animation: cardReveal 0.6s cubic-bezier(0.22,1,0.36,1) 0.08s both, float1 5.2s ease-in-out 1s infinite; }
+  .tarot-card:nth-child(2) { animation: cardReveal 0.6s cubic-bezier(0.22,1,0.36,1) 0.22s both, float2 4.8s ease-in-out 1.2s infinite; }
+  .tarot-card:nth-child(3) { animation: cardReveal 0.6s cubic-bezier(0.22,1,0.36,1) 0.36s both, float3 5.6s ease-in-out 0.8s infinite; }
+  .tarot-card:nth-child(4) { animation: cardReveal 0.6s cubic-bezier(0.22,1,0.36,1) 0.50s both, float4 4.4s ease-in-out 1.5s infinite; }
 
   .card-inner {
     height: 228px;
