@@ -223,9 +223,13 @@
 
   @media (max-width: 540px) {
     .options-grid { grid-template-columns: 1fr; }
-    .tarot-card { width: 120px; }
-    .card-inner { height: 188px; }
-    .card-symbol { font-size: 36px; }
+    .tarot-card { width: 108px; }
+    .card-inner { height: 172px; padding: 22px 8px 18px; }
+    .card-symbol { font-size: 30px; }
+    .card-position-label { font-size: 7px; letter-spacing: 0.12em; }
+    .card-numeral { font-size: 11px; }
+    .card-name { font-size: 9px; letter-spacing: 0.07em; }
+    .card-reversed-label { font-size: 7.5px; }
     .section-cards { gap: 22px; }
     .card-blurb { grid-template-columns: 1fr; gap: 6px; }
     .section-shadow { padding: 22px 20px; }
@@ -573,7 +577,7 @@ function answer(q, val) {
       const loadingEl = document.getElementById('loading');
       loadingEl.style.display = 'flex';
       document.getElementById('loadingText').textContent = LOADING_PHRASES[0];
-      phraseInterval = setInterval(rotatePhrases, 1200);
+      phraseInterval = setInterval(rotatePhrases, 3000);
       setTimeout(showResults, 6000);
     }, 400);
   }
