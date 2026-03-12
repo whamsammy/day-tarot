@@ -137,10 +137,10 @@
     50%      { transform: rotate(calc(var(--card-rot) - 0.9deg)) translateY(4px); }
   }
 
-  .tarot-card:nth-child(1) { animation: cardReveal 0.6s cubic-bezier(0.22,1,0.36,1) 0.08s both, float1 5.2s ease-in-out 1s infinite; }
-  .tarot-card:nth-child(2) { animation: cardReveal 0.6s cubic-bezier(0.22,1,0.36,1) 0.22s both, float2 4.8s ease-in-out 1.2s infinite; }
-  .tarot-card:nth-child(3) { animation: cardReveal 0.6s cubic-bezier(0.22,1,0.36,1) 0.36s both, float3 5.6s ease-in-out 0.8s infinite; }
-  .tarot-card:nth-child(4) { animation: cardReveal 0.6s cubic-bezier(0.22,1,0.36,1) 0.50s both, float4 4.4s ease-in-out 1.5s infinite; }
+  .tarot-card:nth-child(1) { animation: cardReveal 0.6s cubic-bezier(0.22,1,0.36,1) 0.08s both, float1 5.2s ease-in-out infinite; }
+  .tarot-card:nth-child(2) { animation: cardReveal 0.6s cubic-bezier(0.22,1,0.36,1) 0.22s both, float2 4.8s ease-in-out infinite; }
+  .tarot-card:nth-child(3) { animation: cardReveal 0.6s cubic-bezier(0.22,1,0.36,1) 0.36s both, float3 5.6s ease-in-out infinite; }
+  .tarot-card:nth-child(4) { animation: cardReveal 0.6s cubic-bezier(0.22,1,0.36,1) 0.50s both, float4 4.4s ease-in-out infinite; }
 
   .card-inner {
     height: 228px;
@@ -646,40 +646,57 @@ function showResults() {
   clearInterval(phraseInterval);
   document.getElementById('loading').style.display = 'none';
 
-  // Score all 4 answers
+  // Score all 4 answers to find dominant and secondary profiles
   const scores = {};
   answers.forEach(v => { scores[v] = (scores[v] || 0) + 1; });
-  const dominant = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+  const ranked = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const dominant  = ranked[0][0];
+  const secondary = ranked[1] ? ranked[1][0] : ranked[0][0];
 
-  // Draw 3 face-up cards from first 3 answer profiles, no duplicates
+  // Build a merged, weighted card pool from all 4 answer profiles
+  // Each answer contributes its pool; cards appearing in more profiles are more likely
+  const poolScores = {};
+  answers.forEach(v => {
+    const pool = PROFILE_CARDS[v] || PROFILE_CARDS.light;
+    pool.forEach((id, idx) => {
+      // Weight by position in pool (first = strongest match) and frequency
+      poolScores[id] = (poolScores[id] || 0) + (pool.length - idx);
+    });
+  });
+
+  // Sort candidates by weight descending, then shuffle within equal weights for variety
+  const candidates = Object.entries(poolScores)
+    .sort((a, b) => b[1] - a[1] || Math.random() - 0.5)
+    .map(([id]) => parseInt(id));
+
+  // Draw 3 cards from weighted candidates, no duplicates
   const drawn = [];
   const usedIds = new Set();
 
-  for (let i = 0; i < 3; i++) {
-    const pool = PROFILE_CARDS[answers[i]] || PROFILE_CARDS.light;
-    const shuffled = [...pool].sort(() => Math.random() - 0.5);
-    const pick = shuffled.find(id => !usedIds.has(id));
-    if (pick !== undefined) {
-      usedIds.add(pick);
-      drawn.push({ card: ARCANA[pick], reversed: Math.random() < 0.28 });
+  for (const id of candidates) {
+    if (drawn.length >= 3) break;
+    if (!usedIds.has(id)) {
+      usedIds.add(id);
+      drawn.push({ card: ARCANA[id], reversed: Math.random() < 0.28 });
     }
   }
 
-  // Fill any gaps
+  // Fill any gaps with remaining arcana
   let fi = 0;
   while (drawn.length < 3 && fi < ARCANA.length) {
     if (!usedIds.has(fi)) { usedIds.add(fi); drawn.push({ card: ARCANA[fi], reversed: Math.random() < 0.28 }); }
     fi++;
   }
 
-  // Shadow card: dominant profile across all 4 answers, always reversed
+  // Shadow card: driven by dominant profile across all 4 answers, always reversed
   const shadowId = SHADOW_MAP[dominant] ?? 16;
   const resolvedShadowId = usedIds.has(shadowId)
     ? (ARCANA.find(c => !usedIds.has(c.id)) || ARCANA[shadowId]).id
     : shadowId;
   const shadow = ARCANA[resolvedShadowId];
 
-  const readingKey = `${answers[0]}_${answers[1]}`;
+  // Message keyed on dominant + secondary so all 4 answers shape it
+  const readingKey = `${dominant}_${secondary}`;
   const reading = READINGS[readingKey] || "Today holds something unexpected. Stay open - not everything needs to be understood right away.";
   const affirmation = AFFIRMATIONS[Math.floor(Math.random() * AFFIRMATIONS.length)];
 
