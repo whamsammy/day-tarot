@@ -36,31 +36,28 @@
   body::before {
     content: '';
     position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.038'/%3E%3C/svg%3E");
     pointer-events: none; z-index: 9999;
   }
 
   .page { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px 80px; }
 
+  /* ── Header ── */
   header { text-align: center; margin-bottom: 48px; animation: fadeUp 0.8s ease both; }
-
   .eyebrow { font-size: 11px; color: var(--rose); letter-spacing: 0.2em; text-transform: lowercase; margin-bottom: 8px; }
-
   h1 { font-family: 'DM Serif Display', serif; font-size: clamp(42px, 8vw, 72px); font-weight: 400; line-height: 1.1; color: var(--ink); }
   h1 em { font-style: italic; color: var(--rose); }
-
   .date-line { margin-top: 10px; font-size: 10px; color: var(--soft-ink); opacity: 0.5; letter-spacing: 0.18em; }
   .subtitle { margin-top: 6px; font-style: italic; font-size: 12px; color: var(--soft-ink); opacity: 0.7; letter-spacing: 0.08em; }
   .stars { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 16px 0; color: var(--gold); font-size: 18px; letter-spacing: 4px; }
 
+  /* ── Questions ── */
   .question-flow { width: 100%; max-width: 560px; animation: fadeUp 0.9s 0.1s ease both; }
   .question-card { display: none; flex-direction: column; align-items: center; gap: 20px; }
   .question-card.active { display: flex; animation: fadeIn 0.5s ease both; }
   .question-card.leaving { animation: fadeOut 0.3s ease forwards; }
-
   .q-label { font-size: 11px; color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase; }
   .q-text { font-size: clamp(14px, 3vw, 18px); text-align: center; line-height: 1.6; color: var(--ink); }
-
   .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
 
   .option-btn {
@@ -80,6 +77,7 @@
   .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(45,31,38,0.15); transition: all 0.3s ease; }
   .dot.filled { background: var(--gold); transform: scale(1.2); }
 
+  /* ── Loading ── */
   #loading { display: none; flex-direction: column; align-items: center; gap: 20px; padding: 40px; animation: fadeIn 0.5s ease both; }
   .card-shuffle { display: flex; position: relative; height: 100px; width: 200px; justify-content: center; align-items: center; }
   .mini-card { width: 50px; height: 80px; border-radius: 8px; position: absolute; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
@@ -89,127 +87,131 @@
   @keyframes shuffle1 { 0%,100%{transform:rotate(-15deg) translateX(-20px)} 50%{transform:rotate(5deg) translateX(10px) translateY(-10px)} }
   @keyframes shuffle2 { 0%,100%{transform:rotate(0deg) translateX(0)} 50%{transform:rotate(-10deg) translateX(-15px) translateY(5px)} }
   @keyframes shuffle3 { 0%,100%{transform:rotate(12deg) translateX(20px)} 50%{transform:rotate(-5deg) translateX(5px) translateY(-8px)} }
-  .loading-text { font-size: 13px; color: var(--soft-ink); animation: pulse 2s ease-in-out infinite; }
+  .loading-text { font-size: 13px; color: var(--soft-ink); animation: pulse 2s ease-in-out infinite; min-height: 20px; }
 
-  #results { display: none; flex-direction: column; align-items: center; gap: 28px; width: 100%; max-width: 680px; animation: fadeUp 0.6s ease both; }
-
+  /* ── Results ── */
+  #results { display: none; flex-direction: column; align-items: center; gap: 32px; width: 100%; max-width: 700px; animation: fadeUp 0.6s ease both; }
   .result-header { text-align: center; }
   .result-eyebrow { font-size: 11px; color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase; }
   .result-title { font-family: 'DM Serif Display', serif; font-size: clamp(26px, 5vw, 44px); font-weight: 400; line-height: 1.2; margin: 8px 0; }
   .result-title em { font-style: italic; color: var(--rose); }
 
-  .cards-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; width: 100%; }
-
+  /* ── Cards row ── */
+  .cards-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; width: 100%; }
   @media (max-width: 600px) {
-    .cards-row { display: grid; grid-template-columns: 1fr 1fr; justify-items: center; }
+    .cards-row { display: grid; grid-template-columns: 1fr 1fr; justify-items: center; gap: 10px; }
   }
-  .tarot-card { width: 145px; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.12); animation: cardReveal 0.5s ease both; flex-shrink: 0; }
-  .tarot-card:nth-child(1) { animation-delay: 0.1s; }
-  .tarot-card:nth-child(2) { animation-delay: 0.25s; }
-  .tarot-card:nth-child(3) { animation-delay: 0.4s; }
-  .tarot-card:nth-child(4) { animation-delay: 0.55s; }
-  .tarot-card.shadow { opacity: 0.82; }
-  .tarot-card.shadow .card-face { filter: saturate(0.4) brightness(0.8); }
-  @keyframes cardReveal { from { opacity: 0; transform: translateY(30px) rotate(-3deg); } to { opacity: 1; transform: translateY(0); } }
 
-  .card-face {
-    height: 215px; display: grid;
-    grid-template-rows: 32px 1fr 32px;
-    align-items: center; justify-items: center;
-    position: relative; padding: 12px 16px;
+  /* ── Tarot card ── */
+  .tarot-card {
+    width: 148px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(45,31,38,0.18), 0 2px 8px rgba(45,31,38,0.08);
+    animation: cardReveal 0.6s cubic-bezier(0.22,1,0.36,1) both;
+    flex-shrink: 0;
+    position: relative;
   }
-  .card-face::before { content: ''; position: absolute; inset: 8px; border: 1px solid rgba(255,255,255,0.25); border-radius: 10px; pointer-events: none; }
-  .card-symbol { font-size: 42px; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1)); display: flex; align-items: center; justify-content: center; }
-  .card-name { font-size: 10px; text-align: center; color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.2); letter-spacing: 0.08em; align-self: end; }
-  .card-position-label { font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.65); align-self: start; }
-  .card-reversed { font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.4); font-style: italic; }
+  .tarot-card:nth-child(1) { animation-delay: 0.08s; }
+  .tarot-card:nth-child(2) { animation-delay: 0.22s; }
+  .tarot-card:nth-child(3) { animation-delay: 0.36s; }
+  .tarot-card:nth-child(4) { animation-delay: 0.50s; }
+  .tarot-card.is-reversed .card-inner { filter: saturate(0.65) brightness(0.82); }
+  .tarot-card.is-shadow { opacity: 0.88; }
+  .tarot-card.is-shadow .card-inner { filter: saturate(0.28) brightness(0.72); }
+  @keyframes cardReveal {
+    from { opacity: 0; transform: translateY(36px) rotate(-4deg) scale(0.94); }
+    to   { opacity: 1; transform: translateY(0) rotate(var(--card-rot, 0deg)) scale(1); }
+  }
 
-  /* ── Reading sections redesign ── */
+  .card-inner {
+    height: 228px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    padding: 26px 12px 22px;
+  }
+
+  /* Decorative SVG frame overlay */
+  .card-frame {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .card-top { display: flex; flex-direction: column; align-items: center; gap: 3px; position: relative; z-index: 2; }
+  .card-position-label { font-size: 8.5px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.6); font-family: 'Space Mono', monospace; }
+  .card-numeral { font-family: 'DM Serif Display', serif; font-size: 13px; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; }
+
+  .card-symbol-wrap { position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; flex: 1; }
+  .card-symbol { font-size: 44px; filter: drop-shadow(0 3px 12px rgba(0,0,0,0.18)); display: block; line-height: 1; }
+  .card-symbol.flipped { transform: rotate(180deg); }
+
+  .card-bottom { display: flex; flex-direction: column; align-items: center; gap: 2px; position: relative; z-index: 2; }
+  .card-name { font-size: 11px; text-align: center; color: rgba(255,255,255,0.92); text-shadow: 0 1px 4px rgba(0,0,0,0.3); letter-spacing: 0.1em; font-family: 'Space Mono', monospace; }
+  .card-reversed-label { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.42); font-style: italic; }
+
+  /* ── Reading sections ── */
   .reading-sections { width: 100%; display: flex; flex-direction: column; gap: 0; }
-
   .reading-section { animation: fadeUp 0.6s ease both; }
-  .reading-section:nth-child(1) { animation-delay: 0.55s; }
-  .reading-section:nth-child(2) { animation-delay: 0.7s; }
-  .reading-section:nth-child(3) { animation-delay: 0.85s; }
-  .reading-section:nth-child(4) { animation-delay: 1s; }
+  .reading-section:nth-child(1) { animation-delay: 0.5s; }
+  .reading-section:nth-child(2) { animation-delay: 0.65s; }
+  .reading-section:nth-child(3) { animation-delay: 0.8s; }
+  .reading-section:nth-child(4) { animation-delay: 0.95s; }
 
-  /* The message — big editorial pull quote */
-  .section-message {
-    padding: 40px 0 36px;
-    border-top: 1px solid rgba(45,31,38,0.12);
-  }
-  .section-message .section-label {
-    margin-bottom: 18px;
-  }
+  .section-message { padding: 40px 0 36px; border-top: 1px solid rgba(45,31,38,0.12); }
+  .section-message .section-label { margin-bottom: 18px; }
   .section-message .section-body {
     font-family: 'DM Serif Display', serif;
     font-size: clamp(17px, 2.8vw, 22px);
-    line-height: 1.65;
-    color: var(--ink);
-    font-style: italic;
+    line-height: 1.7; color: var(--ink); font-style: italic;
   }
 
-  /* Card blurbs — horizontal strip */
-  .section-cards {
-    padding: 32px 0;
-    border-top: 1px solid rgba(45,31,38,0.08);
-    display: flex;
-    gap: 0;
-  }
-  .card-blurb {
-    flex: 1;
-    padding: 0 20px;
-    border-right: 1px solid rgba(45,31,38,0.08);
-  }
-  .card-blurb:first-child { padding-left: 0; }
-  .card-blurb:last-child { padding-right: 0; border-right: none; }
+  /* Card blurbs - stacked, cleaner than columns */
+  .section-cards { padding: 32px 0; border-top: 1px solid rgba(45,31,38,0.08); display: flex; flex-direction: column; gap: 28px; }
+  .card-blurb { display: grid; grid-template-columns: 120px 1fr; gap: 0 20px; align-items: start; }
+  .card-blurb-left { display: flex; flex-direction: column; gap: 3px; padding-top: 2px; }
+  .card-blurb-name { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); }
+  .card-blurb-tag { font-size: 9px; color: rgba(92,63,78,0.45); font-style: italic; }
 
-  /* Shadow section — dark band */
-  .section-shadow {
-    padding: 28px 32px;
-    background: var(--ink);
-    border-radius: 16px;
-    margin: 8px 0;
-  }
-  .section-shadow .section-label {
-    color: rgba(250,246,240,0.4);
-    margin-bottom: 10px;
-  }
-  .section-shadow .section-body {
-    color: rgba(250,246,240,0.82);
-    font-style: italic;
-    font-size: 13px;
-  }
+  .section-shadow { padding: 28px 32px; background: var(--ink); border-radius: 14px; margin: 4px 0; }
+  .section-shadow .section-label { color: rgba(250,246,240,0.38); margin-bottom: 10px; }
+  .section-shadow .section-body { color: rgba(250,246,240,0.8); font-style: italic; font-size: 13px; line-height: 1.85; }
 
-  /* Practice section */
-  .section-practice {
-    padding: 32px 0 8px;
-    border-top: 1px solid rgba(45,31,38,0.08);
-  }
+  .section-practice { padding: 32px 0 8px; border-top: 1px solid rgba(45,31,38,0.08); }
 
   .section-label { font-size: 10px; color: var(--gold); letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 10px; }
-  .section-body { font-size: 12px; line-height: 1.85; color: var(--soft-ink); }
+  .section-body { font-size: 12px; line-height: 1.88; color: var(--soft-ink); }
 
-  .affirmation {
+  /* ── Affirmation ── */
+  .affirmation-wrap {
     width: 100%;
+    padding: 36px 0 0;
     border-top: 1px solid rgba(45,31,38,0.1);
-    padding: 32px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    animation: fadeUp 0.5s 1s ease both;
+  }
+  .affirmation-eyebrow { font-size: 9px; color: var(--gold); letter-spacing: 0.28em; text-transform: uppercase; opacity: 0.7; }
+  .affirmation {
     font-family: 'DM Serif Display', serif;
-    font-size: clamp(18px, 3vw, 24px);
-    font-style: italic;
-    color: var(--rose);
-    text-align: center;
-    line-height: 1.4;
-    animation: fadeUp 0.5s 1.1s ease both;
-    letter-spacing: 0.01em;
+    font-size: clamp(20px, 3.5vw, 28px);
+    font-style: italic; color: var(--rose);
+    text-align: center; line-height: 1.4; letter-spacing: 0.01em;
   }
 
   .btn-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; animation: fadeUp 0.5s 1.1s ease both; }
   .again-btn {
+    background: transparent; border: 1.5px solid var(--ink); color: var(--ink);
     border-radius: 100px; padding: 12px 28px;
     font-family: 'Space Mono', monospace; font-size: 11px; cursor: pointer; transition: all 0.25s;
   }
-  .again-btn { background: transparent; border: 1.5px solid var(--ink); color: var(--ink); }
   .again-btn:hover { background: var(--ink); color: var(--cream); transform: scale(1.02); }
 
   footer { margin-top: 60px; text-align: center; font-size: 10px; color: var(--soft-ink); opacity: 0.4; animation: fadeIn 1s 0.5s ease both; }
@@ -217,17 +219,16 @@
   @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   @keyframes fadeOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-12px); } }
-  @keyframes pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+  @keyframes pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
 
   @media (max-width: 540px) {
     .options-grid { grid-template-columns: 1fr; }
-    .cards-row { gap: 8px; }
-    .tarot-card { width: 118px; }
-    .card-face { height: 180px; }
-    .card-symbol { font-size: 34px; }
-    .section-cards { flex-direction: column; gap: 20px; }
-    .card-blurb { border-right: none; border-bottom: 1px solid rgba(45,31,38,0.08); padding: 0 0 20px; }
-    .card-blurb:last-child { border-bottom: none; padding-bottom: 0; }
+    .tarot-card { width: 120px; }
+    .card-inner { height: 188px; }
+    .card-symbol { font-size: 36px; }
+    .section-cards { gap: 22px; }
+    .card-blurb { grid-template-columns: 1fr; gap: 6px; }
+    .section-shadow { padding: 22px 20px; }
   }
 </style>
 </head>
@@ -238,111 +239,128 @@
     <h1>your day<br>in <em>tarot</em></h1>
     <div class="stars">✦ ✧ ✦</div>
     <p class="date-line" id="dateLine"></p>
-    <p class="subtitle">four cards, drawn just for today</p>
+    <p class="subtitle">four cards, drawn just for you</p>
   </header>
 
   <div class="question-flow" id="questionFlow">
     <div class="question-card active" id="qCard0">
-      <p class="q-label">question 1 of 3</p>
+      <p class="q-label">question 1 of 4</p>
       <p class="q-text" id="qText0"></p>
       <div class="options-grid" id="qOpts0"></div>
-      <div class="progress-dots"><div class="dot filled"></div><div class="dot"></div><div class="dot"></div></div>
+      <div class="progress-dots">
+        <div class="dot filled"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      </div>
     </div>
     <div class="question-card" id="qCard1">
-      <p class="q-label">question 2 of 3</p>
+      <p class="q-label">question 2 of 4</p>
       <p class="q-text" id="qText1"></p>
       <div class="options-grid" id="qOpts1"></div>
-      <div class="progress-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div></div>
+      <div class="progress-dots">
+        <div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div><div class="dot"></div>
+      </div>
     </div>
     <div class="question-card" id="qCard2">
-      <p class="q-label">question 3 of 3</p>
+      <p class="q-label">question 3 of 4</p>
       <p class="q-text" id="qText2"></p>
       <div class="options-grid" id="qOpts2"></div>
-      <div class="progress-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div>
+      <div class="progress-dots">
+        <div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div>
+      </div>
+    </div>
+    <div class="question-card" id="qCard3">
+      <p class="q-label">question 4 of 4</p>
+      <p class="q-text" id="qText3"></p>
+      <div class="options-grid" id="qOpts3"></div>
+      <div class="progress-dots">
+        <div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div>
+      </div>
     </div>
   </div>
 
   <div id="loading">
     <div class="card-shuffle">
-      <div class="mini-card"></div><div class="mini-card"></div><div class="mini-card"></div>
+      <div class="mini-card"></div>
+      <div class="mini-card"></div>
+      <div class="mini-card"></div>
     </div>
-    <p class="loading-text">reading the cards for you...</p>
+    <p class="loading-text" id="loadingText"></p>
   </div>
 
   <div id="results"></div>
 </div>
 
-<footer>made with care ✦ come back tomorrow for a new reading</footer>
+<footer>your cards reset at midnight ✦ the deck remembers nothing</footer>
 
 <script>
-// ── Date & seed ───────────────────────────────────────────────────────────────
+// ── Date ──────────────────────────────────────────────────────────────────────
 const NOW = new Date();
-const DAY_STR = NOW.toLocaleDateString('en-GB', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-document.getElementById('dateLine').textContent = DAY_STR.toLowerCase();
+document.getElementById('dateLine').textContent =
+  NOW.toLocaleDateString('en-GB', { weekday:'long', day:'numeric', month:'long', year:'numeric' }).toLowerCase();
 const DAY_SEED = Math.floor(NOW / 86400000);
-
 function sr(seed) { const x = Math.sin(seed + 1) * 10000; return x - Math.floor(x); }
 
-// ── 50-question bank ──────────────────────────────────────────────────────────
+// ── Loading phrases ───────────────────────────────────────────────────────────
+const LOADING_PHRASES = [
+  "the cards are listening...",
+  "reading between the lines...",
+  "consulting the arcana...",
+  "the veil is thinning...",
+  "something is taking shape...",
+  "the deck is speaking...",
+];
+let phraseIdx = 0;
+function rotatePhrases() {
+  const el = document.getElementById('loadingText');
+  if (!el) return;
+  el.style.opacity = 0;
+  setTimeout(() => {
+    phraseIdx = (phraseIdx + 1) % LOADING_PHRASES.length;
+    el.textContent = LOADING_PHRASES[phraseIdx];
+    el.style.opacity = 1;
+  }, 400);
+}
+let phraseInterval;
+
+// ── Question bank ─────────────────────────────────────────────────────────────
 const QB = [
-  { t:"How did you wake up this morning?", o:[{e:"☀️",l:"ready to take on the world",v:"energized"},{e:"🌙",l:"still half in a dream",v:"tired"},{e:"🌀",l:"with something on my mind",v:"anxious"},{e:"🍃",l:"slow and peaceful",v:"peaceful"}]},
-  { t:"What does today feel like it's asking of you?", o:[{e:"⚡",l:"to move, decide, act",v:"action"},{e:"🫧",l:"to slow down and breathe",v:"rest"},{e:"🤝",l:"to reach out to someone",v:"connect"},{e:"🪞",l:"to look inward",v:"reflect"}]},
-  { t:"Pick the image that calls to you right now.", o:[{e:"🌕",l:"a full moon over water",v:"moon"},{e:"🌿",l:"a path into the woods",v:"path"},{e:"🕯️",l:"a single candle flame",v:"flame"},{e:"🗝️",l:"an ornate golden key",v:"key"}]},
-  { t:"What are you carrying into today?", o:[{e:"💭",l:"unfinished thoughts",v:"anxious"},{e:"🌱",l:"quiet hope",v:"peaceful"},{e:"🔥",l:"real excitement",v:"energized"},{e:"🌫️",l:"a kind of fog",v:"tired"}]},
-  { t:"If today had a texture, it would be...", o:[{e:"🪨",l:"rough and resistant",v:"anxious"},{e:"🧸",l:"soft and forgiving",v:"peaceful"},{e:"⚡",l:"electric and alive",v:"energized"},{e:"🌊",l:"flowing and uncertain",v:"tired"}]},
-  { t:"What do you most need right now?", o:[{e:"🛏️",l:"genuine rest",v:"rest"},{e:"🗣️",l:"to be heard",v:"connect"},{e:"🎯",l:"a clear direction",v:"action"},{e:"🧘",l:"stillness inside",v:"reflect"}]},
-  { t:"How does your body feel this morning?", o:[{e:"💪",l:"strong and ready",v:"energized"},{e:"🌿",l:"gentle and soft",v:"peaceful"},{e:"😮‍💨",l:"heavy and slow",v:"tired"},{e:"🌀",l:"unsettled, restless",v:"anxious"}]},
-  { t:"What season does today feel like?", o:[{e:"🌸",l:"spring — new beginnings",v:"energized"},{e:"🍂",l:"autumn — letting go",v:"reflect"},{e:"❄️",l:"winter — going inward",v:"tired"},{e:"☀️",l:"summer — full bloom",v:"peaceful"}]},
-  { t:"Where is your mind right now?", o:[{e:"🌤️",l:"clear, mostly present",v:"peaceful"},{e:"🌪️",l:"spinning with thoughts",v:"anxious"},{e:"🌑",l:"somewhere far away",v:"tired"},{e:"🎆",l:"buzzing with ideas",v:"energized"}]},
-  { t:"What would feel like a win today?", o:[{e:"✅",l:"finishing something big",v:"action"},{e:"💌",l:"a real conversation",v:"connect"},{e:"🛁",l:"an hour just for me",v:"rest"},{e:"💡",l:"understanding something better",v:"reflect"}]},
-  { t:"Which animal energy do you feel today?", o:[{e:"🦁",l:"lion — bold and present",v:"energized"},{e:"🦉",l:"owl — watchful, wise",v:"reflect"},{e:"🐢",l:"turtle — slow and steady",v:"tired"},{e:"🦋",l:"butterfly — light and shifting",v:"peaceful"}]},
-  { t:"What's sitting in the back of your mind?", o:[{e:"❤️",l:"someone I care about",v:"connect"},{e:"📋",l:"something I keep putting off",v:"action"},{e:"🌀",l:"a question with no answer yet",v:"reflect"},{e:"😮‍💨",l:"nothing I can name",v:"tired"}]},
-  { t:"What time of day does your energy match?", o:[{e:"🌅",l:"golden hour — warm and still",v:"peaceful"},{e:"🕛",l:"midnight — restless and searching",v:"anxious"},{e:"☀️",l:"noon — sharp and full on",v:"energized"},{e:"🌆",l:"dusk — winding down",v:"tired"}]},
-  { t:"Pick a scent that speaks to your mood.", o:[{e:"🌹",l:"rose — soft, romantic",v:"peaceful"},{e:"🌿",l:"eucalyptus — clearing, sharp",v:"energized"},{e:"🪵",l:"cedar — grounded, quiet",v:"reflect"},{e:"🌧️",l:"petrichor — melancholy, deep",v:"tired"}]},
-  { t:"What does your heart want to say today?", o:[{e:"💬",l:"I need to talk to someone",v:"connect"},{e:"🤫",l:"I just want quiet",v:"rest"},{e:"🏃",l:"I need to do something",v:"action"},{e:"🌑",l:"I'm not sure yet",v:"reflect"}]},
-  { t:"If you were a weather system today, you'd be...", o:[{e:"⛈️",l:"a thunderstorm — electric",v:"anxious"},{e:"🌤️",l:"partly cloudy — managing",v:"tired"},{e:"🌞",l:"full sunshine — open",v:"energized"},{e:"🌫️",l:"soft fog — dreamy",v:"peaceful"}]},
-  { t:"What's the shape of today for you?", o:[{e:"📐",l:"angular — full of edges",v:"anxious"},{e:"⭕",l:"circular — soft and whole",v:"peaceful"},{e:"➡️",l:"an arrow — pointed, moving",v:"action"},{e:"〰️",l:"a wave — unpredictable",v:"tired"}]},
-  { t:"Which feels more true right now?", o:[{e:"🌊",l:"I'm going with the flow",v:"peaceful"},{e:"🏋️",l:"I'm pushing against something",v:"action"},{e:"🌀",l:"I'm caught in a loop",v:"anxious"},{e:"🛸",l:"I feel a little detached",v:"tired"}]},
-  { t:"What would be the kindest thing you could do for yourself today?", o:[{e:"😴",l:"actually rest",v:"rest"},{e:"📞",l:"call someone I love",v:"connect"},{e:"📓",l:"write it all out",v:"reflect"},{e:"🎯",l:"tackle the one big thing",v:"action"}]},
-  { t:"Which colour is your mood?", o:[{e:"🩷",l:"pink — tender, open",v:"peaceful"},{e:"🔵",l:"blue — calm and deep",v:"reflect"},{e:"🟡",l:"yellow — bright, a little nervous",v:"anxious"},{e:"🟠",l:"orange — warm and doing",v:"energized"}]},
-  { t:"Where do you feel today's tension?", o:[{e:"🫁",l:"in my chest — breath held",v:"anxious"},{e:"💤",l:"behind my eyes — fatigue",v:"tired"},{e:"🦴",l:"in my shoulders — carrying weight",v:"reflect"},{e:"🫀",l:"nowhere yet — I feel okay",v:"peaceful"}]},
-  { t:"What kind of energy surrounds you today?", o:[{e:"🌺",l:"warm and inviting",v:"connect"},{e:"⚔️",l:"charged, a little combative",v:"anxious"},{e:"🍵",l:"slow and nurturing",v:"rest"},{e:"🎪",l:"busy and colourful",v:"energized"}]},
-  { t:"If today were a film genre, it would be...", o:[{e:"🎭",l:"drama — intense, emotional",v:"anxious"},{e:"🎬",l:"coming-of-age — tender, searching",v:"reflect"},{e:"🎉",l:"feel-good — light and warm",v:"energized"},{e:"🧘",l:"slow cinema — quiet and observant",v:"peaceful"}]},
-  { t:"How honest are you being with yourself today?", o:[{e:"🪞",l:"painfully honest",v:"reflect"},{e:"😌",l:"mostly at peace with things",v:"peaceful"},{e:"🙈",l:"avoiding something",v:"tired"},{e:"💥",l:"confronting it head on",v:"action"}]},
-  { t:"What does your ideal today look like?", o:[{e:"🌄",l:"an adventure, even small",v:"energized"},{e:"🕰️",l:"slow, with nowhere to be",v:"rest"},{e:"🤲",l:"giving and receiving warmth",v:"connect"},{e:"📚",l:"learning something that matters",v:"reflect"}]},
-  { t:"How full is your cup right now?", o:[{e:"🥛",l:"full — I have lots to give",v:"energized"},{e:"🫙",l:"half — getting by fine",v:"peaceful"},{e:"🕳️",l:"empty — running on fumes",v:"tired"},{e:"💧",l:"just a drop — I need refilling",v:"rest"}]},
-  { t:"Which word lands closest to your mood?", o:[{e:"✨",l:"anticipation",v:"energized"},{e:"🌑",l:"melancholy",v:"tired"},{e:"🌀",l:"restlessness",v:"anxious"},{e:"🕊️",l:"acceptance",v:"peaceful"}]},
-  { t:"What are you most afraid of today?", o:[{e:"🚪",l:"missing an opportunity",v:"action"},{e:"💔",l:"disappointing someone",v:"connect"},{e:"🪞",l:"seeing something true in myself",v:"reflect"},{e:"😶",l:"nothing in particular",v:"peaceful"}]},
-  { t:"How do you want to move through today?", o:[{e:"🏃",l:"fast — there's momentum here",v:"action"},{e:"🚶",l:"steady — one thing at a time",v:"peaceful"},{e:"🧍",l:"still — pausing more than moving",v:"rest"},{e:"🌀",l:"spiralling — can't quite settle",v:"anxious"}]},
-  { t:"What feels unfinished?", o:[{e:"💬",l:"a conversation I need to have",v:"connect"},{e:"📋",l:"a task I keep delaying",v:"action"},{e:"🤔",l:"a thought I can't complete",v:"reflect"},{e:"💤",l:"sleep — I'm still catching up",v:"tired"}]},
-  { t:"Which of these calls to you most?", o:[{e:"🏔️",l:"a mountain peak at sunrise",v:"energized"},{e:"🛶",l:"a still lake at dusk",v:"peaceful"},{e:"🌌",l:"the open sky at night",v:"reflect"},{e:"🌧️",l:"rain on a window",v:"tired"}]},
-  { t:"What do you need permission to do today?", o:[{e:"😴",l:"rest without guilt",v:"rest"},{e:"💥",l:"be a little selfish",v:"action"},{e:"😢",l:"feel what I'm feeling",v:"reflect"},{e:"🎉",l:"be happy without explaining it",v:"peaceful"}]},
-  { t:"What's the undertone of your morning?", o:[{e:"🌸",l:"gentle hope",v:"peaceful"},{e:"🌩️",l:"low-grade dread",v:"anxious"},{e:"🕯️",l:"quiet determination",v:"action"},{e:"🛌",l:"reluctant awakening",v:"tired"}]},
-  { t:"What do you most want to let go of today?", o:[{e:"😤",l:"a grudge or resentment",v:"reflect"},{e:"📱",l:"distraction and noise",v:"rest"},{e:"😰",l:"fear of getting it wrong",v:"anxious"},{e:"🧱",l:"the need to have it all figured out",v:"peaceful"}]},
-  { t:"How are you showing up in your relationships today?", o:[{e:"🫂",l:"present and giving",v:"connect"},{e:"🪨",l:"a little closed off",v:"tired"},{e:"🤹",l:"stretching myself too thin",v:"anxious"},{e:"🌊",l:"going with whatever's needed",v:"peaceful"}]},
-  { t:"Which of these feels most like home right now?", o:[{e:"🌿",l:"a quiet garden",v:"peaceful"},{e:"📚",l:"a warm library",v:"reflect"},{e:"🎶",l:"a live music venue",v:"energized"},{e:"🛁",l:"a long bath, alone",v:"rest"}]},
-  { t:"What do you want the end of today to feel like?", o:[{e:"✅",l:"accomplished — I did something real",v:"action"},{e:"🥰",l:"connected — I wasn't alone",v:"connect"},{e:"😮‍💨",l:"lighter — I released something",v:"reflect"},{e:"😴",l:"rested — I actually took care of myself",v:"rest"}]},
-  { t:"If you could change one thing about today before it starts?", o:[{e:"⏰",l:"more time",v:"rest"},{e:"🧠",l:"a clearer head",v:"anxious"},{e:"💞",l:"better company",v:"connect"},{e:"⚡",l:"more energy",v:"tired"}]},
-  { t:"Pick a moon phase that matches your mood.", o:[{e:"🌑",l:"new moon — quiet, beginning",v:"peaceful"},{e:"🌓",l:"half moon — in progress",v:"action"},{e:"🌕",l:"full moon — heightened, visible",v:"anxious"},{e:"🌘",l:"waning — releasing, retreating",v:"tired"}]},
-  { t:"What do you want to remember about today?", o:[{e:"💛",l:"that I was kind to myself",v:"rest"},{e:"🌟",l:"that I tried something brave",v:"action"},{e:"🤍",l:"that I let someone in",v:"connect"},{e:"🌿",l:"that I stayed present",v:"peaceful"}]},
-  { t:"What's your relationship with uncertainty today?", o:[{e:"😤",l:"frustrated — I want answers",v:"anxious"},{e:"🤷",l:"accepting — it is what it is",v:"peaceful"},{e:"🕵️",l:"curious — let's see what unfolds",v:"energized"},{e:"😶‍🌫️",l:"numb — not engaging with it",v:"tired"}]},
-  { t:"Which emotion is closest to the surface?", o:[{e:"💛",l:"gratitude",v:"peaceful"},{e:"😤",l:"frustration",v:"anxious"},{e:"💔",l:"longing",v:"tired"},{e:"🔥",l:"determination",v:"energized"}]},
-  { t:"What would a wise older version of you say right now?", o:[{e:"🛑",l:"slow down, you're rushing",v:"rest"},{e:"💪",l:"you're stronger than you think",v:"action"},{e:"🤝",l:"let people help you",v:"connect"},{e:"🌱",l:"this is all part of it",v:"reflect"}]},
-  { t:"How does the air feel today?", o:[{e:"🌬️",l:"crisp and clarifying",v:"energized"},{e:"🌫️",l:"heavy and thick",v:"tired"},{e:"🌸",l:"warm and fragrant",v:"peaceful"},{e:"⚡",l:"charged, before a storm",v:"anxious"}]},
-  { t:"What does your intuition keep whispering?", o:[{e:"🗣️",l:"say the thing you've been avoiding",v:"action"},{e:"🚪",l:"it's time to walk away from something",v:"reflect"},{e:"🌱",l:"keep going — it's working",v:"energized"},{e:"🤫",l:"not today — wait",v:"rest"}]},
-  { t:"Which of these are you most hungry for?", o:[{e:"🌟",l:"recognition — to be seen",v:"connect"},{e:"🧭",l:"direction — to know the next step",v:"action"},{e:"🛏️",l:"softness — to just be held",v:"rest"},{e:"🔮",l:"clarity — to understand myself better",v:"reflect"}]},
-  { t:"What is today quietly teaching you?", o:[{e:"🌊",l:"how to surrender",v:"peaceful"},{e:"🔥",l:"how to want things",v:"energized"},{e:"🌑",l:"how to sit with discomfort",v:"reflect"},{e:"🌱",l:"how to begin again",v:"tired"}]},
-  { t:"Pick the element that feels most alive in you today.", o:[{e:"🔥",l:"fire — passionate, consuming",v:"energized"},{e:"💧",l:"water — flowing, emotional",v:"peaceful"},{e:"🌍",l:"earth — grounded, patient",v:"reflect"},{e:"💨",l:"air — restless, thinking",v:"anxious"}]},
-  { t:"How do you want to be remembered by tonight?", o:[{e:"🌟",l:"as someone who showed up fully",v:"action"},{e:"🤍",l:"as someone who was gentle",v:"rest"},{e:"🌿",l:"as someone who was present",v:"peaceful"},{e:"💬",l:"as someone who really listened",v:"connect"}]},
-  { t:"What does silence feel like for you today?", o:[{e:"🕊️",l:"peaceful — I could live in it",v:"peaceful"},{e:"😟",l:"uncomfortable — I need noise",v:"anxious"},{e:"💤",l:"heavy — I might fall asleep",v:"tired"},{e:"💡",l:"alive — ideas are forming",v:"reflect"}]},
+  { t:"How did you wake up this morning?", o:[{e:"☀️",l:"ready to take on the world",v:"active"},{e:"🌙",l:"still half in a dream",v:"dark"},{e:"🌀",l:"with something on my mind",v:"inner"},{e:"🍃",l:"slow and peaceful",v:"receptive"}]},
+  { t:"What does today feel like it's asking of you?", o:[{e:"⚡",l:"to move, decide, act",v:"active"},{e:"🫧",l:"to slow down and breathe",v:"receptive"},{e:"🤝",l:"to reach out to someone",v:"social"},{e:"🪞",l:"to look inward",v:"inner"}]},
+  { t:"What are you carrying into today?", o:[{e:"💭",l:"unfinished thoughts",v:"inner"},{e:"🌱",l:"quiet hope",v:"light"},{e:"🔥",l:"real excitement",v:"active"},{e:"🌫️",l:"a kind of fog",v:"dark"}]},
+  { t:"What do you most need right now?", o:[{e:"🛏️",l:"genuine rest",v:"receptive"},{e:"🗣️",l:"to be heard",v:"social"},{e:"🎯",l:"a clear direction",v:"active"},{e:"🧘",l:"stillness inside",v:"inner"}]},
+  { t:"How does your body feel this morning?", o:[{e:"💪",l:"strong and ready",v:"active"},{e:"🌿",l:"gentle and soft",v:"receptive"},{e:"😮‍💨",l:"heavy and slow",v:"dark"},{e:"🌀",l:"unsettled and restless",v:"inner"}]},
+  { t:"What would feel like a win today?", o:[{e:"✅",l:"finishing something big",v:"active"},{e:"💌",l:"a real conversation",v:"social"},{e:"🛁",l:"an hour just for me",v:"receptive"},{e:"💡",l:"understanding something better",v:"inner"}]},
+  { t:"What's sitting in the back of your mind?", o:[{e:"❤️",l:"someone I care about",v:"social"},{e:"📋",l:"something I keep putting off",v:"active"},{e:"🌀",l:"a question without an answer yet",v:"inner"},{e:"😮‍💨",l:"nothing I can name",v:"dark"}]},
+  { t:"What does your heart want to say today?", o:[{e:"💬",l:"I need to talk to someone",v:"social"},{e:"🤫",l:"I just want quiet",v:"receptive"},{e:"🏃",l:"I need to do something",v:"active"},{e:"🌑",l:"I'm not sure yet",v:"inner"}]},
+  { t:"Which feels more true right now?", o:[{e:"🌊",l:"I'm going with the flow",v:"receptive"},{e:"🏋️",l:"I'm pushing against something",v:"active"},{e:"🌀",l:"I'm caught in a loop",v:"inner"},{e:"🛸",l:"I feel a little detached",v:"dark"}]},
+  { t:"What would be the kindest thing you could do for yourself today?", o:[{e:"😴",l:"actually rest",v:"receptive"},{e:"📞",l:"call someone I love",v:"social"},{e:"📓",l:"write it all out",v:"inner"},{e:"🎯",l:"tackle the one big thing",v:"active"}]},
+  { t:"Where do you feel today's tension?", o:[{e:"🫁",l:"in my chest, breath held",v:"inner"},{e:"💤",l:"behind my eyes, pure fatigue",v:"dark"},{e:"🦴",l:"in my shoulders, carrying weight",v:"receptive"},{e:"🫀",l:"nowhere yet, I feel okay",v:"light"}]},
+  { t:"If today were a film genre, it would be...", o:[{e:"🎭",l:"an intense drama",v:"inner"},{e:"🎬",l:"a tender coming-of-age story",v:"light"},{e:"🎉",l:"a warm feel-good film",v:"social"},{e:"🧘",l:"slow, quiet, observant cinema",v:"receptive"}]},
+  { t:"How honest are you being with yourself today?", o:[{e:"🪞",l:"painfully honest",v:"inner"},{e:"😌",l:"mostly at peace with things",v:"light"},{e:"🙈",l:"avoiding something",v:"dark"},{e:"💥",l:"confronting it head on",v:"active"}]},
+  { t:"How full is your cup right now?", o:[{e:"🥛",l:"full, I have lots to give",v:"active"},{e:"🫙",l:"half, getting by fine",v:"light"},{e:"🕳️",l:"empty, running on fumes",v:"dark"},{e:"💧",l:"nearly empty, I need refilling",v:"receptive"}]},
+  { t:"What are you most afraid of today?", o:[{e:"🚪",l:"missing an opportunity",v:"active"},{e:"💔",l:"disappointing someone",v:"social"},{e:"🪞",l:"seeing something true in myself",v:"inner"},{e:"😶",l:"nothing in particular",v:"light"}]},
+  { t:"What feels unfinished?", o:[{e:"💬",l:"a conversation I need to have",v:"social"},{e:"📋",l:"a task I keep delaying",v:"active"},{e:"🤔",l:"a thought I can't quite complete",v:"inner"},{e:"💤",l:"sleep, I'm still catching up",v:"dark"}]},
+  { t:"What do you need permission to do today?", o:[{e:"😴",l:"rest without guilt",v:"receptive"},{e:"💥",l:"be a little selfish",v:"active"},{e:"😢",l:"feel what I'm feeling",v:"inner"},{e:"🎉",l:"be happy without explaining it",v:"light"}]},
+  { t:"What's the undertone of your morning?", o:[{e:"🌸",l:"gentle hope",v:"light"},{e:"🌩️",l:"low-grade dread",v:"dark"},{e:"🕯️",l:"quiet determination",v:"active"},{e:"🛌",l:"reluctant awakening",v:"receptive"}]},
+  { t:"How are you showing up in your relationships today?", o:[{e:"🫂",l:"present and giving",v:"social"},{e:"🪨",l:"a little closed off",v:"dark"},{e:"🤹",l:"stretched too thin",v:"inner"},{e:"🌊",l:"going with whatever's needed",v:"receptive"}]},
+  { t:"What do you want the end of today to feel like?", o:[{e:"✅",l:"accomplished, I did something real",v:"active"},{e:"🥰",l:"connected, I wasn't alone",v:"social"},{e:"😮‍💨",l:"lighter, like I released something",v:"inner"},{e:"😴",l:"rested, genuinely rested",v:"receptive"}]},
+  { t:"Pick a moon phase that matches your mood.", o:[{e:"🌑",l:"new moon, quiet and beginning",v:"inner"},{e:"🌓",l:"half moon, still in progress",v:"active"},{e:"🌕",l:"full moon, heightened and visible",v:"light"},{e:"🌘",l:"waning, releasing and retreating",v:"dark"}]},
+  { t:"What do you want to remember about today?", o:[{e:"💛",l:"that I was kind to myself",v:"receptive"},{e:"🌟",l:"that I tried something brave",v:"active"},{e:"🤍",l:"that I let someone in",v:"social"},{e:"🌿",l:"that I stayed present",v:"light"}]},
+  { t:"Which emotion is closest to the surface?", o:[{e:"💛",l:"gratitude",v:"light"},{e:"😤",l:"frustration",v:"active"},{e:"💔",l:"longing",v:"dark"},{e:"🔥",l:"determination",v:"active"}]},
+  { t:"What would a wise older version of you say right now?", o:[{e:"🛑",l:"slow down, you're rushing",v:"receptive"},{e:"💪",l:"you're stronger than you think",v:"light"},{e:"🤝",l:"let people help you",v:"social"},{e:"🌱",l:"this is all part of it",v:"inner"}]},
+  { t:"What does your intuition keep whispering?", o:[{e:"🗣️",l:"say the thing you've been avoiding",v:"active"},{e:"🚪",l:"it's time to walk away from something",v:"inner"},{e:"🌱",l:"keep going, it's working",v:"light"},{e:"🤫",l:"not today, wait",v:"receptive"}]},
+  { t:"Which of these are you most hungry for?", o:[{e:"🌟",l:"to be truly seen",v:"social"},{e:"🧭",l:"to know the next step",v:"active"},{e:"🛏️",l:"to just be held",v:"receptive"},{e:"🔮",l:"to understand myself better",v:"inner"}]},
+  { t:"Pick the element that feels most alive in you today.", o:[{e:"🔥",l:"fire, passionate and consuming",v:"active"},{e:"💧",l:"water, flowing and emotional",v:"receptive"},{e:"🌍",l:"earth, grounded and patient",v:"inner"},{e:"💨",l:"air, restless and thinking",v:"dark"}]},
+  { t:"What does silence feel like for you today?", o:[{e:"🕊️",l:"peaceful, I could live in it",v:"receptive"},{e:"😟",l:"uncomfortable, I need noise",v:"social"},{e:"💤",l:"heavy, I might fall asleep",v:"dark"},{e:"💡",l:"alive, ideas are forming",v:"inner"}]},
+  { t:"How do you want to move through today?", o:[{e:"🏃",l:"fast, there's momentum here",v:"active"},{e:"🚶",l:"steady, one thing at a time",v:"light"},{e:"🧍",l:"still, pausing more than moving",v:"receptive"},{e:"🌀",l:"spiralling, can't quite settle",v:"inner"}]},
+  { t:"Which of these calls to you most?", o:[{e:"🏔️",l:"a mountain peak at sunrise",v:"active"},{e:"🛶",l:"a still lake at dusk",v:"receptive"},{e:"🌌",l:"the open sky at night",v:"inner"},{e:"🌧️",l:"rain on a window",v:"dark"}]},
 ];
 
-// Pick 3 daily questions from seed
-function pickDailyQuestions() {
+// ── Daily question picker ─────────────────────────────────────────────────────
+function pickDailyQuestions(count) {
   const used = new Set();
   const result = [];
   let s = DAY_SEED * 7;
-  while (result.length < 3) {
+  while (result.length < count) {
     s = Math.floor(sr(s) * QB.length + s) % QB.length;
     if (s < 0) s += QB.length;
     if (!used.has(s)) { used.add(s); result.push(QB[s]); }
@@ -351,7 +369,7 @@ function pickDailyQuestions() {
   return result;
 }
 
-const todayQs = pickDailyQuestions();
+const todayQs = pickDailyQuestions(4);
 todayQs.forEach((q, i) => {
   document.getElementById(`qText${i}`).textContent = q.t;
   document.getElementById(`qOpts${i}`).innerHTML = q.o.map(o =>
@@ -359,65 +377,161 @@ todayQs.forEach((q, i) => {
   ).join('');
 });
 
-// ── Cards ─────────────────────────────────────────────────────────────────────
-const CARDS = {
-  energized:{ name:'The Sun',            symbol:'☀️', color:['#f9d77e','#e8a634'], meaning:'vitality' },
-  tired:    { name:'The Moon',           symbol:'🌙', color:['#8fa6c8','#5a7a9e'], meaning:'intuition' },
-  anxious:  { name:'The Tower',          symbol:'⚡', color:['#c97d6e','#9e4f3e'], meaning:'change' },
-  peaceful: { name:'The Star',           symbol:'✨', color:['#9bbaa8','#5e8a72'], meaning:'hope' },
-  action:   { name:'The Chariot',        symbol:'🏹', color:['#c9a96e','#9e7a3e'], meaning:'momentum' },
-  rest:     { name:'The Hermit',         symbol:'🕯️', color:['#9b8ea8','#6e5e7a'], meaning:'solitude' },
-  connect:  { name:'The Lovers',         symbol:'🌹', color:['#e8c4b0','#c97d6e'], meaning:'connection' },
-  reflect:  { name:'The High Priestess', symbol:'🌀', color:['#a8b4c8','#6e7e9a'], meaning:'wisdom' },
-  moon:     { name:'The Moon',           symbol:'🌕', color:['#8fa6c8','#4a6a8e'], meaning:'mystery' },
-  path:     { name:'The Fool',           symbol:'🍃', color:['#9bbaa8','#4e7a62'], meaning:'adventure' },
-  flame:    { name:'Strength',           symbol:'🔥', color:['#e8a66e','#c97d3e'], meaning:'courage' },
-  key:      { name:'The Emperor',        symbol:'🗝️', color:['#c9a96e','#8e6a2e'], meaning:'power' },
-};
-
-const SHADOWS = [
-  { name:'The Shadow',    symbol:'🌑', color:['#4a3540','#2d1f26'], warning:'Something unexamined is asking for your attention today.' },
-  { name:'The Veil',      symbol:'🕸️', color:['#3d3050','#2a1f38'], warning:'You may be seeing what you want to see, not what is.' },
-  { name:'The Thorn',     symbol:'🥀', color:['#503040','#332030'], warning:'An old wound may be colouring how you move through today.' },
-  { name:'The Labyrinth', symbol:'🌀', color:['#304050','#1f2a38'], warning:'The pattern you keep repeating wants to be broken.' },
-  { name:'The Ember',     symbol:'🔥', color:['#503020','#382010'], warning:'Something you\'ve been suppressing is still burning underneath.' },
-  { name:'The Fog',       symbol:'🌫️', color:['#405060','#2a3840'], warning:'Clarity is available, but only if you stop moving for a moment.' },
+// ── 22 Major Arcana ───────────────────────────────────────────────────────────
+const ARCANA = [
+  { id:0,  name:'The Fool',           numeral:'0',    symbol:'🌿', color:['#9bbaa8','#4e7a62'],
+    upright:{ meaning:'new beginnings',       blurb:'The Fool invites you to step forward without needing all the answers first. Something new is genuinely available to you today - not because you are ready, but because readiness is not what this moment requires. Begin anyway.' },
+    reversed:{ meaning:'hesitation',          blurb:'The Fool reversed asks where you are holding back out of fear rather than wisdom. The leap you keep postponing is still there, patient and waiting. What is the smallest version of it you could take today?' }
+  },
+  { id:1,  name:'The Magician',       numeral:'I',    symbol:'⚗️', color:['#e8c86e','#c89a30'],
+    upright:{ meaning:'focused will',         blurb:'The Magician reminds you that everything you need is already in your hands. You are not waiting to be given the tools - you have them. Today calls for deliberate, concentrated effort rather than scattered energy.' },
+    reversed:{ meaning:'scattered energy',    blurb:'The Magician reversed points to energy dispersed in too many directions. The gifts are real, but they need focus. What is the one thing today that deserves your full attention instead of a fraction of it?' }
+  },
+  { id:2,  name:'The High Priestess', numeral:'II',   symbol:'🌀', color:['#a8b4c8','#6e7e9a'],
+    upright:{ meaning:'deep knowing',         blurb:'The High Priestess knows more than she says, and right now so do you. Not everything needs to be understood or explained - some things only need to be felt. Trust what you sense beneath the surface today.' },
+    reversed:{ meaning:'blocked intuition',   blurb:'The High Priestess reversed suggests something important is being drowned out by noise. You may be seeking answers outside yourself when the truth is already inside. Create a quiet moment today and simply listen.' }
+  },
+  { id:3,  name:'The Empress',        numeral:'III',  symbol:'🌸', color:['#e8b4c8','#c87890'],
+    upright:{ meaning:'gentle abundance',     blurb:'The Empress brings the energy of warmth, growth, and creative nourishment. Something in your life is ready to flourish if you tend to it with patience and care. Do not rush what wants to unfold at its own pace.' },
+    reversed:{ meaning:'self-neglect',        blurb:'The Empress reversed asks whether you are extending care to everyone except yourself. Creative energy cannot be poured from an empty vessel. What would it mean to genuinely nurture yourself today, without conditions?' }
+  },
+  { id:4,  name:'The Emperor',        numeral:'IV',   symbol:'🗝️', color:['#c9a96e','#8e6a2e'],
+    upright:{ meaning:'grounded authority',   blurb:'The Emperor is the card of structure, clarity, and the kind of power that comes from knowing yourself. Today calls for decisiveness. The authority you need is already yours - it just needs to be claimed.' },
+    reversed:{ meaning:'rigidity',            blurb:'The Emperor reversed points to control becoming a cage. You may be holding on too tightly - to a plan, a rule, a version of yourself. Where today might a little loosening actually strengthen things?' }
+  },
+  { id:5,  name:'The Hierophant',     numeral:'V',    symbol:'🕊️', color:['#b0a8c8','#7868a0'],
+    upright:{ meaning:'sacred wisdom',        blurb:'The Hierophant points to the wisdom held in tradition, ritual, and the guidance of those who have walked further. Is there someone whose counsel you have been resisting? Today might be the day to seek it.' },
+    reversed:{ meaning:'questioning convention', blurb:'The Hierophant reversed appears when the rules no longer fit. Something you have been told you should do or believe is worth questioning now. Trust that your own moral compass is a valid guide.' }
+  },
+  { id:6,  name:'The Lovers',         numeral:'VI',   symbol:'🌹', color:['#e8c4b0','#c87d6e'],
+    upright:{ meaning:'true connection',      blurb:'The Lovers is not only about romance - it is about genuine recognition between people, and the alignment of your choices with your deepest values. Something today asks you to choose consciously rather than by habit.' },
+    reversed:{ meaning:'misalignment',        blurb:'The Lovers reversed asks where you are acting out of obligation rather than true desire. A relationship or decision may need honest reassessment. What would you choose if you listened only to what you actually want?' }
+  },
+  { id:7,  name:'The Chariot',        numeral:'VII',  symbol:'🏹', color:['#c9a96e','#9e7a3e'],
+    upright:{ meaning:'forward momentum',     blurb:'The Chariot asks for directed, disciplined movement. The energy is there - the task is steering it. You do not need to feel completely ready. Commit to a direction today and let the momentum carry the rest.' },
+    reversed:{ meaning:'loss of direction',   blurb:'The Chariot reversed points to force without direction. You may be pushing hard but not in the right way. Pause before the next move. Winning the wrong race is still losing something important.' }
+  },
+  { id:8,  name:'Strength',           numeral:'VIII', symbol:'🔥', color:['#e8a66e','#c97d3e'],
+    upright:{ meaning:'quiet courage',        blurb:'Strength is not force - it is the quiet power of someone who knows themselves. Today, your courage is not about being loud or certain. It is about being honest, patient, and soft in the places that most need it.' },
+    reversed:{ meaning:'self-doubt',          blurb:'Strength reversed asks where self-doubt is quietly undermining you. The power has not gone anywhere - it is simply being turned against itself. What would it feel like to be on your own side today, without condition?' }
+  },
+  { id:9,  name:'The Hermit',         numeral:'IX',   symbol:'🕯️', color:['#9b8ea8','#6e5e7a'],
+    upright:{ meaning:'solitude and wisdom',  blurb:'The Hermit turns inward and finds everything it needs there. Your instinct to withdraw, reflect, or slow down today is not a retreat from life - it is where the real understanding happens. Trust the quiet.' },
+    reversed:{ meaning:'isolation',           blurb:'The Hermit reversed points to solitude that has curdled into loneliness. Reflection is nourishing; withdrawal can become avoidance. Today, consider whether the distance you are keeping is still serving you.' }
+  },
+  { id:10, name:'Wheel of Fortune',   numeral:'X',    symbol:'☸️', color:['#a8c8b0','#5e9a70'],
+    upright:{ meaning:'turning tides',        blurb:'The Wheel of Fortune marks a moment of shift - not necessarily dramatic, but real. Something is in motion that was not before. Trust the cycle rather than fighting it. Things are moving in your favour even if it is not yet visible.' },
+    reversed:{ meaning:'resistance to change',blurb:'The Wheel reversed asks where you are clinging to a pattern that has already begun to turn. Change is not being done to you - it is moving through you. Let it.' }
+  },
+  { id:11, name:'Justice',            numeral:'XI',   symbol:'⚖️', color:['#c8b4a8','#9a7e70'],
+    upright:{ meaning:'honest reckoning',     blurb:'Justice asks for clarity and honesty - not judgement, but the kind of clear-eyed seeing that allows you to move forward truthfully. What do you already know that you have been softening, just a little?' },
+    reversed:{ meaning:'avoidance of truth',  blurb:'Justice reversed appears when something true is being looked away from. The discomfort of seeing it is shorter than the cost of not seeing it. What would you have to acknowledge today to finally feel clean?' }
+  },
+  { id:12, name:'The Hanged One',     numeral:'XII',  symbol:'🌒', color:['#a0b8c8','#5e7e9a'],
+    upright:{ meaning:'willing surrender',    blurb:'The Hanged One offers a radical reframe: pause is not defeat. Seen from a different angle, everything changes. What looks like stalling today may actually be the most honest response to where you are.' },
+    reversed:{ meaning:'stalling',            blurb:'The Hanged One reversed points to a pause that has outlived its purpose. You have processed enough for now. The insight you were waiting for may already be here - it just needs you to act on it.' }
+  },
+  { id:13, name:'Death',              numeral:'XIII', symbol:'🥀', color:['#7a8aa0','#4a5a70'],
+    upright:{ meaning:'transformation',       blurb:'Death in tarot is never literal - it is the card of profound transformation. Something is ending so something else can begin. The grief of releasing a version of yourself or a chapter of your life is real, and also necessary.' },
+    reversed:{ meaning:'clinging to the past',blurb:'Death reversed points to resistance to an ending that has already happened. Holding on to what has finished delays everything waiting to begin. What would it feel like to lay something down today, completely?' }
+  },
+  { id:14, name:'Temperance',         numeral:'XIV',  symbol:'🌊', color:['#9bbaa8','#5e8a72'],
+    upright:{ meaning:'steady integration',   blurb:'Temperance is the alchemy of extremes - the quiet, unhurried blending of what seemed incompatible. You do not need to choose between opposing parts of yourself today. Both are true. Both belong.' },
+    reversed:{ meaning:'imbalance',           blurb:'Temperance reversed asks where excess or depletion has crept in. Something is out of balance, and you likely already sense it. One gentle correction today is worth more than a dramatic overhaul tomorrow.' }
+  },
+  { id:15, name:'The Devil',          numeral:'XV',   symbol:'🔗', color:['#705060','#4a2e3c'],
+    upright:{ meaning:'examining chains',     blurb:'The Devil shines light on the chains we have chosen - patterns, addictions, beliefs that keep us small. The difficult truth this card holds is that the door has always been unlocked. What are you still holding onto that is holding you back?' },
+    reversed:{ meaning:'breaking free',       blurb:'The Devil reversed marks a moment of release - the beginning of stepping out of something that confined you. The pattern is losing its grip. Keep going. Even small loosening counts.' }
+  },
+  { id:16, name:'The Tower',          numeral:'XVI',  symbol:'⚡', color:['#c97d6e','#9e4f3e'],
+    upright:{ meaning:'necessary disruption', blurb:'The Tower breaks things open - but only what was already unstable. What feels like sudden collapse may actually be the beginning of something truer. The ground beneath the rubble is solid. Let yourself land.' },
+    reversed:{ meaning:'avoided reckoning',   blurb:'The Tower reversed suggests a disruption being delayed rather than avoided. The pressure is building. A smaller, chosen change now may prevent a larger, forced one later. What do you already know needs to shift?' }
+  },
+  { id:17, name:'The Star',           numeral:'XVII', symbol:'✨', color:['#9bbaa8','#5e8a72'],
+    upright:{ meaning:'quiet hope',           blurb:'The Star is the card of restoration - the deep breath after the storm. It does not promise everything is fixed; it promises that hope itself is still real. Your peace today is not passive. It is a kind of power, and worth protecting.' },
+    reversed:{ meaning:'lost hope',           blurb:'The Star reversed points to hope that has dimmed - not extinguished, but obscured. Something has made it hard to believe in good outcomes. What is one small thing today that could remind you that light still exists?' }
+  },
+  { id:18, name:'The Moon',           numeral:'XVIII',symbol:'🌙', color:['#8fa6c8','#5a7a9e'],
+    upright:{ meaning:'deep intuition',       blurb:'The Moon governs what moves beneath the surface - the feelings that do not yet have names, the knowing that arrives without explanation. Do not demand clarity today. Trust the pull you are feeling even if you cannot name it yet.' },
+    reversed:{ meaning:'confusion lifting',   blurb:'The Moon reversed marks the slow clearing of a fog that has made things hard to see. Something that was murky is becoming legible. The confusion is not permanent - understanding is closer than it feels.' }
+  },
+  { id:19, name:'The Sun',            numeral:'XIX',  symbol:'☀️', color:['#f9d77e','#e8a634'],
+    upright:{ meaning:'radiant clarity',      blurb:'The Sun is the card of uncomplicated joy and clear-eyed vitality. Something today carries real warmth - do not talk yourself out of receiving it. You are allowed to feel good. You are allowed to let today be simply, genuinely good.' },
+    reversed:{ meaning:'dimmed joy',          blurb:'The Sun reversed asks what is muting the light you deserve to feel. External pressure or internal doubt may be making it hard to access joy. It has not gone - it is still there, waiting for a small turning toward it.' }
+  },
+  { id:20, name:'Judgement',          numeral:'XX',   symbol:'🔔', color:['#c8b090','#9e7e5e'],
+    upright:{ meaning:'a moment of reckoning',blurb:'Judgement marks the moment of awakening - when something in you hears a call it can no longer ignore. This is not a judgement of failure but of readiness. Something is asking you to rise to who you already know you are.' },
+    reversed:{ meaning:'self-judgement',      blurb:'Judgement reversed points to a harsh inner verdict that is keeping you stuck. You are not on trial today. What would it feel like to grant yourself the same forgiveness you would give someone you love?' }
+  },
+  { id:21, name:'The World',          numeral:'XXI',  symbol:'🌍', color:['#7aaa90','#3e7a5e'],
+    upright:{ meaning:'wholeness',            blurb:'The World marks a completion - not an ending so much as an arrival. Something has come full circle. Take a moment today to acknowledge how far you have actually come before reaching for what comes next.' },
+    reversed:{ meaning:'incompletion',        blurb:'The World reversed asks what remains unfinished that you keep circling around. A chapter may need a deliberate closing before the next one can open cleanly. What needs a proper ending?' }
+  },
 ];
 
+// ── Profile - card pools ──────────────────────────────────────────────────────
+const PROFILE_CARDS = {
+  active:    [7, 1, 4, 8, 19, 10],
+  light:     [19, 17, 10, 0, 3, 21],
+  dark:      [18, 13, 12, 15, 9, 16],
+  inner:     [2, 9, 18, 11, 12, 20],
+  receptive: [14, 3, 17, 5, 9, 12],
+  social:    [6, 3, 10, 0, 19, 21],
+};
+
+// Shadow card: always reversed, driven by dominant profile across all 4 answers
+const SHADOW_MAP = {
+  active:    15, // The Devil - drive masking compulsion
+  light:     20, // Judgement - self-judgement hidden beneath confidence
+  dark:      13, // Death - resisting a necessary ending
+  inner:      9, // The Hermit - reflection becoming isolation
+  receptive: 12, // The Hanged One - surrender becoming stagnation
+  social:     6, // The Lovers - seeking others to avoid self
+};
+
+const SPREAD_POSITIONS = ['past influence', 'present energy', 'what is emerging', 'what is hidden'];
+
+// ── Readings ──────────────────────────────────────────────────────────────────
 const READINGS = {
-  energized_action:"Today has an electric charge to it, and it isn't accidental. You woke up ready, and the universe is ready for you right back - there's a rare alignment between your inner state and what the day is asking for. Don't second-guess it or talk yourself out of it. Move with what you're feeling, because this kind of momentum is a gift.",
-  energized_rest:"You have real energy today, and that's worth acknowledging. But the cards are quietly asking you to be discerning with it - not everything deserves your full force, and not every door that opens today needs to be walked through. The most powerful move might be knowing what to hold back. Save something for yourself.",
-  energized_connect:"Your light is particularly bright today, and other people will notice before you do. Someone in your orbit needs to feel it: a message, a presence, a moment of your undivided attention could mean more than you'd expect. Don't keep what you're carrying to yourself. Warmth given freely always finds its way back.",
-  energized_reflect:"Bright energy without direction has a way of scattering, and today the cards are asking you to turn some of that light inward. Sit with a question you've been too busy or too afraid to ask yourself. You have the clarity right now to look at something honestly. What you find in the quiet may matter more than anything the outside world is offering.",
-  tired_action:"You're being asked to move even before you feel ready, and that's an uncomfortable place to be. But trust that the momentum builds as you go - the body finds its rhythm once it's in motion. You don't need to feel energised before you begin. The first step is the only one that matters right now.",
-  tired_rest:"Your body is telling you something, and it's worth actually listening to rather than pushing past. Rest is not a pause from your life - it is woven into it just as much as the doing is. Today, choosing ease is not giving up on anything. It is, in fact, the most honest response to where you are.",
-  tired_connect:"Reaching out when you're tired can feel like the last thing you have capacity for, but sometimes it's exactly what restores you. You don't have to perform or explain or be good company. Just let someone sit beside you in it. The people who love you don't need you at full capacity. Presence shared is presence restored.",
-  tired_reflect:"There is something quietly beautiful about the in-between, even when it doesn't feel that way. You're not stuck - you're processing something that needs time and space to settle before it can be understood. Don't rush yourself toward resolution. Give yourself permission to not have this figured out yet.",
-  anxious_action:"That restless feeling doesn't have to be the enemy, it can be fuel. Anxiety and excitement are physiologically almost identical, and right now your body is charged with something that has real momentum in it. Don't fight what you're feeling; redirect it. You have more available to you right now than you're giving yourself credit for.",
-  anxious_rest:"The spiral will slow down if you give it permission to. Find one small thing you can soften today - one breath, one gentler choice, one moment where you don't push back against what is. This is not weakness or avoidance. This is, in fact, the whole practice, and it's harder than it sounds.",
-  anxious_connect:"Carrying something alone always makes it heavier than it actually is. You don't need to have the words perfectly right, or explain everything, or even fully understand what you're feeling before you let someone in. Just let someone sit beside you in it today. The weight of shared things is always lighter.",
-  anxious_reflect:"What you're feeling right now is information, it's not a verdict on you or your situation. Sit with the question today rather than rushing to resolve it, because sometimes the discomfort is pointing directly at the thing most worth understanding. You're not behind for not having the answer yet. You have more time than it feels like.",
-  peaceful_action:"This kind of calm is rare, and it's the perfect foundation to act from. Decisions made from stillness tend to be the ones that hold. Move forward today. There's something ready to be done, but carry this quietness with you as you do it. Don't let the pace of the world pull you out of what you're feeling.",
-  peaceful_rest:"What a rare and genuinely precious thing - to begin a day already at ease with yourself. Protect it. Don't let obligation or noise chip away at it before you've had the chance to really settle into it. You don't have to fill every quiet moment with something. The ease itself is enough.",
-  peaceful_connect:"Peace radiates outward without you having to do a single thing. The people around you will feel something shift simply by being in your presence today. You have something real to offer just by showing up as you are. Don't underestimate how much that matters to the people you love.",
-  peaceful_reflect:"You're in exactly the right state to see something clearly today. Something about your life - a situation, a relationship, a pattern - is ready to be understood differently, and the stillness you're carrying is the right lens for it. Let yourself think the thought you've been circling around. Today, you can look at it.",
+  active_active:       "You are running on real momentum today, and that is genuinely worth something. But The Chariot asks for direction, not just speed. Make sure the force you are bringing is pointed at the thing that actually matters most to you right now.",
+  active_light:        "Something is aligning beautifully between your energy and the day ahead. Trust what you are feeling - this is not overconfidence, it is readiness. Step into it.",
+  active_dark:         "You want to move, but something beneath the surface is pulling in a different direction. Today might be about slowing down long enough to hear what the resistance is trying to tell you.",
+  active_inner:        "Drive without self-knowledge is just noise. Today you are being asked to bring your ambition into conversation with your inner world. What is it that you are really working toward, underneath the task?",
+  active_receptive:    "The impulse to act and the call to rest are both speaking at once today. The question is which one serves you better in this particular moment - and only you know the answer to that.",
+  active_social:       "Your energy today wants to flow outward toward other people. The best thing you could do with your drive right now might not be a task - it might be a conversation, a presence, a moment of real connection.",
+  light_active:        "You are in a rare state of clarity and warmth, and that combination is the perfect foundation from which to act. Decisions made from this place tend to hold. Move forward today, and carry the light with you.",
+  light_light:         "Today is a genuinely good day - not because nothing is hard, but because you have arrived at it with something intact. Protect what you are feeling. Let yourself actually receive the ease that is here.",
+  light_dark:          "The warmth you are carrying and the weight underneath it are both real, and you do not have to choose between them. Today asks you to hold both without letting either one cancel the other out.",
+  light_inner:         "The clarity you are feeling right now is the perfect lens through which to look at something you have been circling. You are in exactly the right state to understand something you have not fully understood before.",
+  light_receptive:     "There is an ease to today that is worth simply inhabiting rather than rushing through. Not every day needs to be productive. Some days are about letting goodness settle in, undisturbed.",
+  light_social:        "Your warmth today is genuinely contagious in the best sense. Other people will feel something different simply by being near you. Show up. You have more to offer in your presence than you might realise.",
+  dark_active:         "You are being asked to move even when the weight is heavy, and that is one of the harder things. Trust that momentum builds as you go. You do not need to feel ready. The first step is the only one that matters right now.",
+  dark_light:          "The heaviness you are carrying does not cancel the hope - and the hope does not erase the heaviness. Both are true. Today is about holding that complexity without collapsing it in either direction.",
+  dark_dark:           "There is something quietly beautiful about sitting with what is difficult rather than reaching past it. You are not stuck - you are processing something that needs time. Let yourself be where you are without rushing toward resolution.",
+  dark_inner:          "What you are feeling today has something important to tell you if you give it space. Do not reach for distraction or explanation just yet. Sit with it a little longer. The understanding is forming beneath the surface.",
+  dark_receptive:      "Your body is telling you something, and it is worth actually listening to rather than pushing past. Rest is not a pause from your life - it is woven into it. Choosing ease today is not giving up. It is the most honest response to where you are.",
+  dark_social:         "Reaching out when you are tired can feel like the last thing you have capacity for - but sometimes it is exactly what restores you. You do not have to perform or explain. Just let someone sit beside you in it.",
+  inner_active:        "The reflection you are doing is not separate from action - it is informing it. Before you move today, take a moment to ask yourself what you are actually moving toward. The insight may change the direction.",
+  inner_light:         "The quiet work you have been doing inside yourself is real, even when it is invisible. Today you may notice something shift - a small piece of understanding arriving that has been forming for longer than you knew.",
+  inner_dark:          "You are in deep waters today, and that is allowed. Not everything needs to be brought to the surface quickly. Trust that what you are processing has its own timing, and that the understanding will come when it is ready.",
+  inner_inner:         "You are moving through something internally that requires your full attention, even if nothing looks different from the outside. This is not a quiet time - it is an important one. Give it the space it is asking for.",
+  inner_receptive:     "The stillness you are sitting with today is not emptiness - it is potential. Something is gathering itself. You do not need to force it. The softness you are allowing is part of how the answer arrives.",
+  inner_social:        "The internal work you have been doing wants to meet the world today in some small way. A moment of genuine connection might reveal something about yourself that you have been sitting with alone.",
+  receptive_active:    "You have been allowing yourself to rest and receive, and that has been necessary. Today something in you is ready to move again. Trust the impulse. The energy you have been restoring is ready to be used.",
+  receptive_light:     "There is a softness to today that deserves to be met with equal softness. You do not need to produce anything, prove anything, or push anywhere. Simply being here, open and present, is enough.",
+  receptive_dark:      "The heaviness and the ease are sitting side by side today. Let them. You do not have to resolve the tension - sometimes the most honest thing is to acknowledge that both things are true at once.",
+  receptive_inner:     "The rest you are giving yourself is creating space for something important to surface. Do not fill the quiet too quickly. What arrives in stillness is often what you most needed to hear.",
+  receptive_receptive: "Today is genuinely asking you to do less. Not because you have failed at anything - but because the most important thing right now is restoration. Receive without guilt. This is its own kind of work.",
+  receptive_social:    "You have been taking care of yourself, and now some of that renewed capacity wants to flow toward others. A small gesture of warmth or connection today might mean more than you would expect.",
+  social_active:       "Your desire to connect and your desire to do something real are pointing in the same direction today. The most meaningful action you can take might involve another person. Who comes to mind?",
+  social_light:        "Warmth is what you are bringing and warmth is what today wants. Something about your presence today is quietly important to someone around you - more than you might think. Let yourself be seen.",
+  social_dark:         "Connection can be one of the most restoring things when everything feels heavy. You do not need to be fully okay before you reach out. The people who love you do not need you at full capacity.",
+  social_inner:        "The connection you are seeking today may begin with yourself. Who you are in relationship to others is deeply informed by how you are in relationship with your own interior. Start there.",
+  social_receptive:    "You want to be with people today, and that desire is good information. But let it be genuine connection rather than distraction. Presence given freely - not performed - is what nourishes everyone.",
+  social_social:       "You are in a genuinely relational moment - the cards are all pointing outward. Let someone in today. Not in a performance of closeness, but in a real, unguarded moment of being with another person.",
 };
 
-const CARD_BLURBS = {
-  energized: "The Sun has drawn your restless, ready energy into its light. This card asks you to lead with confidence today - not arrogance, but a quiet trust in what you already know.",
-  tired:     "The Moon doesn't ask you to shine; it simply asks you to feel. Let your tiredness tell you something true today rather than being something to push past.",
-  anxious:   "The Tower breaks things open, but only what was already unstable. The restlessness you're carrying today may be asking you to look at something honestly rather than holding it together by force.",
-  peaceful:  "The Star is the card of quiet hope and restoration. Your peace today is not passive - it is a kind of power, and it's worth protecting.",
-  action:    "The Chariot is all forward motion and directed will. Today is asking you to decide, commit, and move, not frantically, but with intention.",
-  rest:      "The Hermit turns inward and finds everything it needs there. Your call to rest or reflect today is not a retreat, it is where the real work happens.",
-  connect:   "The Lovers is not just about romance - it's about the moments of genuine recognition between people. Today, connection is where something important will happen.",
-  reflect:   "The High Priestess knows more than she says. What she asks of you today is not to speak but to listen - to yourself, first.",
-  moon:      "The Moon governs what moves beneath the surface. Trust the pull you're feeling today, even if you can't name it yet.",
-  path:      "The Fool steps forward without knowing exactly what comes next, and that's the point. Something new is available to you today, but only if you're willing to begin.",
-  flame:     "Strength is not force, it is the quiet power of someone who knows themselves. Today, your courage is not about being loud; it's about being honest.",
-  key:       "The Emperor brings structure and authority. Today, the power you're looking for is already yours - it just needs to be claimed.",
-};
-
+// ── Affirmations ──────────────────────────────────────────────────────────────
 const AFFIRMATIONS = [
   "You are allowed to change your mind at any point",
   "What you're feeling right now is completely valid",
@@ -431,6 +545,9 @@ const AFFIRMATIONS = [
   "You are allowed to take up space today",
   "Not every day has to mean something - some can just be lived",
   "Your pace is the right pace",
+  "You are doing better than you think",
+  "Healing is not linear, and neither are you",
+  "You are not your worst day",
 ];
 
 // ── Answer flow ───────────────────────────────────────────────────────────────
@@ -440,58 +557,126 @@ let currentQ = 0;
 function answer(q, val) {
   answers[q] = val;
   currentQ++;
-  if (currentQ < 3) {
+  if (currentQ < 4) {
     const current = document.getElementById(`qCard${q}`);
     current.classList.add('leaving');
     setTimeout(() => {
       current.classList.remove('active', 'leaving');
       current.style.display = 'none';
-      const next = document.getElementById(`qCard${currentQ}`);
-      next.classList.add('active');
+      document.getElementById(`qCard${currentQ}`).classList.add('active');
     }, 400);
   } else {
     const current = document.getElementById(`qCard${q}`);
     current.classList.add('leaving');
     setTimeout(() => {
       document.getElementById('questionFlow').style.display = 'none';
-      document.getElementById('loading').style.display = 'flex';
-      setTimeout(showResults, 3800);
+      const loadingEl = document.getElementById('loading');
+      loadingEl.style.display = 'flex';
+      document.getElementById('loadingText').textContent = LOADING_PHRASES[0];
+      phraseInterval = setInterval(rotatePhrases, 1200);
+      setTimeout(showResults, 6000);
     }, 400);
   }
 }
 
+// ── SVG card frame ────────────────────────────────────────────────────────────
+function cardFrameSVG() {
+  return `<svg class="card-frame" viewBox="0 0 148 228" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <!-- outer border -->
+    <rect x="6" y="6" width="136" height="216" rx="10" ry="10" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+    <!-- inner border -->
+    <rect x="11" y="11" width="126" height="206" rx="7" ry="7" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="0.75"/>
+    <!-- corner flourishes - top left -->
+    <path d="M6 22 Q6 6 22 6" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <circle cx="17" cy="17" r="1.5" fill="rgba(255,255,255,0.25)"/>
+    <path d="M11 26 L11 20 L17 20" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="0.75"/>
+    <!-- corner flourishes - top right -->
+    <path d="M142 22 Q142 6 126 6" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <circle cx="131" cy="17" r="1.5" fill="rgba(255,255,255,0.25)"/>
+    <path d="M137 26 L137 20 L131 20" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="0.75"/>
+    <!-- corner flourishes - bottom left -->
+    <path d="M6 206 Q6 222 22 222" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <circle cx="17" cy="211" r="1.5" fill="rgba(255,255,255,0.25)"/>
+    <path d="M11 202 L11 208 L17 208" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="0.75"/>
+    <!-- corner flourishes - bottom right -->
+    <path d="M142 206 Q142 222 126 222" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <circle cx="131" cy="211" r="1.5" fill="rgba(255,255,255,0.25)"/>
+    <path d="M137 202 L137 208 L131 208" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="0.75"/>
+    <!-- top centre ornament -->
+    <path d="M70 14 L74 10 L78 14 L74 18 Z" fill="rgba(255,255,255,0.18)"/>
+    <line x1="30" y1="14" x2="66" y2="14" stroke="rgba(255,255,255,0.12)" stroke-width="0.75"/>
+    <line x1="82" y1="14" x2="118" y2="14" stroke="rgba(255,255,255,0.12)" stroke-width="0.75"/>
+    <!-- bottom centre ornament -->
+    <path d="M70 214 L74 210 L78 214 L74 218 Z" fill="rgba(255,255,255,0.18)"/>
+    <line x1="30" y1="214" x2="66" y2="214" stroke="rgba(255,255,255,0.12)" stroke-width="0.75"/>
+    <line x1="82" y1="214" x2="118" y2="214" stroke="rgba(255,255,255,0.12)" stroke-width="0.75"/>
+    <!-- subtle vignette -->
+    <radialGradient id="vig" cx="50%" cy="50%" r="70%">
+      <stop offset="60%" stop-color="transparent"/>
+      <stop offset="100%" stop-color="rgba(0,0,0,0.22)"/>
+    </radialGradient>
+    <rect x="0" y="0" width="148" height="228" rx="14" fill="url(#vig)"/>
+  </svg>`;
+}
+
 // ── Results ───────────────────────────────────────────────────────────────────
 function showResults() {
+  clearInterval(phraseInterval);
   document.getElementById('loading').style.display = 'none';
 
-  // Deduplicate: if two answers map to the same card, swap in a fallback
-  const fallbacks = ['moon','path','flame','key'];
-  const usedKeys = new Set();
-  const cardKeys = answers.map((a, i) => {
-    if (!usedKeys.has(a)) { usedKeys.add(a); return a; }
-    // find first fallback not yet used
-    const fb = fallbacks.find(f => !usedKeys.has(f)) || fallbacks[i % fallbacks.length];
-    usedKeys.add(fb); return fb;
-  });
+  // Score all 4 answers
+  const scores = {};
+  answers.forEach(v => { scores[v] = (scores[v] || 0) + 1; });
+  const dominant = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
 
-  const c1 = CARDS[cardKeys[0]];
-  const c2 = CARDS[cardKeys[1]];
-  const c3 = CARDS[cardKeys[2]];
-  const shadow = SHADOWS[Math.floor(sr(DAY_SEED + 99) * SHADOWS.length)];
-  const reading = READINGS[`${answers[0]}_${answers[1]}`] || "Today holds something unexpected. Stay open — not everything needs to be understood right away.";
-  const affirmation = AFFIRMATIONS[Math.floor(sr(DAY_SEED + 55) * AFFIRMATIONS.length)];
+  // Draw 3 face-up cards from first 3 answer profiles, no duplicates
+  const drawn = [];
+  const usedIds = new Set();
+
+  for (let i = 0; i < 3; i++) {
+    const pool = PROFILE_CARDS[answers[i]] || PROFILE_CARDS.light;
+    const shuffled = [...pool].sort(() => Math.random() - 0.5);
+    const pick = shuffled.find(id => !usedIds.has(id));
+    if (pick !== undefined) {
+      usedIds.add(pick);
+      drawn.push({ card: ARCANA[pick], reversed: Math.random() < 0.28 });
+    }
+  }
+
+  // Fill any gaps
+  let fi = 0;
+  while (drawn.length < 3 && fi < ARCANA.length) {
+    if (!usedIds.has(fi)) { usedIds.add(fi); drawn.push({ card: ARCANA[fi], reversed: Math.random() < 0.28 }); }
+    fi++;
+  }
+
+  // Shadow card: dominant profile across all 4 answers, always reversed
+  const shadowId = SHADOW_MAP[dominant] ?? 16;
+  const resolvedShadowId = usedIds.has(shadowId)
+    ? (ARCANA.find(c => !usedIds.has(c.id)) || ARCANA[shadowId]).id
+    : shadowId;
+  const shadow = ARCANA[resolvedShadowId];
+
+  const readingKey = `${answers[0]}_${answers[1]}`;
+  const reading = READINGS[readingKey] || "Today holds something unexpected. Stay open - not everything needs to be understood right away.";
+  const affirmation = AFFIRMATIONS[Math.floor(Math.random() * AFFIRMATIONS.length)];
+
+  const centre = drawn[1] || drawn[0];
+  const titleMeaning = centre.reversed ? centre.card.reversed.meaning : centre.card.upright.meaning;
+
+  const rots = [-5, -1.5, 2, 5.5];
 
   document.getElementById('results').innerHTML = `
     <div class="result-header">
       <p class="result-eyebrow">✦ your reading ✦</p>
-      <h2 class="result-title">today holds <em>${c2.meaning}</em></h2>
+      <h2 class="result-title">today holds <em>${titleMeaning}</em></h2>
     </div>
 
     <div class="cards-row">
-      ${card(c1,'morning energy',-5)}
-      ${card(c2,'today asks',-1.5)}
-      ${card(c3,'your intuition',2)}
-      ${shadowCard(shadow)}
+      ${renderCard(drawn[0], SPREAD_POSITIONS[0], rots[0])}
+      ${renderCard(drawn[1], SPREAD_POSITIONS[1], rots[1])}
+      ${renderCard(drawn[2], SPREAD_POSITIONS[2], rots[2])}
+      ${renderShadowCard(shadow, SPREAD_POSITIONS[3], rots[3])}
     </div>
 
     <div class="reading-sections">
@@ -502,16 +687,19 @@ function showResults() {
       </div>
 
       <div class="reading-section section-cards">
-        ${[[c1,cardKeys[0]],[c2,cardKeys[1]],[c3,cardKeys[2]]].map(([c,key])=>`
+        ${drawn.map(({ card, reversed }) => `
           <div class="card-blurb">
-            <p class="section-label">✦ ${c.name}</p>
-            <p class="section-body">${CARD_BLURBS[key]}</p>
+            <div class="card-blurb-left">
+              <p class="card-blurb-name">${card.name}</p>
+              <p class="card-blurb-tag">${card.numeral} · ${reversed ? 'reversed' : 'upright'}</p>
+            </div>
+            <p class="section-body">${reversed ? card.reversed.blurb : card.upright.blurb}</p>
           </div>`).join('')}
       </div>
 
       <div class="reading-section section-shadow">
-        <p class="section-label">✦ shadow — ${shadow.name}</p>
-        <p class="section-body">${shadow.warning}</p>
+        <p class="section-label">✦ what is hidden - ${shadow.name} reversed</p>
+        <p class="section-body">${shadow.reversed.blurb}</p>
       </div>
 
       <div class="reading-section section-practice">
@@ -521,33 +709,60 @@ function showResults() {
 
     </div>
 
-    <div class="affirmation">"${affirmation}"</div>
+    <div class="affirmation-wrap">
+      <p class="affirmation-eyebrow">✦ carry this with you ✦</p>
+      <p class="affirmation">${affirmation}</p>
+    </div>
 
     <div class="btn-row">
       <button class="again-btn" onclick="location.reload()">↩ draw again</button>
     </div>
   `;
+
   document.getElementById('results').style.display = 'flex';
 }
 
-function card(c, pos, rot) {
-  return `<div class="tarot-card" style="transform:rotate(${rot}deg);">
-    <div class="card-face" style="background:linear-gradient(160deg,${c.color[0]},${c.color[1]});">
-      <span class="card-position-label">${pos}</span>
-      <span class="card-symbol">${c.symbol}</span>
-      <span class="card-name">${c.name}</span>
-    </div></div>`;
+// ── Card renderers ────────────────────────────────────────────────────────────
+function renderCard({ card, reversed }, position, rot) {
+  const cls = ['tarot-card', reversed ? 'is-reversed' : ''].filter(Boolean).join(' ');
+  const symCls = reversed ? 'card-symbol flipped' : 'card-symbol';
+  const revLabel = reversed ? `<span class="card-reversed-label">reversed</span>` : '';
+  return `<div class="${cls}" style="--card-rot:${rot}deg; transform:rotate(${rot}deg);">
+    <div class="card-inner" style="background:linear-gradient(168deg,${card.color[0]},${card.color[1]});">
+      ${cardFrameSVG()}
+      <div class="card-top">
+        <span class="card-position-label">${position}</span>
+        <span class="card-numeral">${card.numeral}</span>
+      </div>
+      <div class="card-symbol-wrap">
+        <span class="${symCls}">${card.symbol}</span>
+      </div>
+      <div class="card-bottom">
+        <span class="card-name">${card.name}</span>
+        ${revLabel}
+      </div>
+    </div>
+  </div>`;
 }
 
-function shadowCard(s) {
-  return `<div class="tarot-card shadow" style="transform:rotate(5.5deg);">
-    <div class="card-face" style="background:linear-gradient(160deg,${s.color[0]},${s.color[1]});">
-      <span class="card-position-label">shadow</span>
-      <span class="card-symbol">${s.symbol}</span>
-      <span class="card-name" style="display:flex;flex-direction:column;align-items:center;gap:2px;">${s.name}<span class="card-reversed">reversed</span></span>
-    </div></div>`;
+function renderShadowCard(card, position, rot) {
+  return `<div class="tarot-card is-shadow" style="--card-rot:${rot}deg; transform:rotate(${rot}deg);">
+    <div class="card-inner" style="background:linear-gradient(168deg,${card.color[0]},${card.color[1]});">
+      ${cardFrameSVG()}
+      <div class="card-top">
+        <span class="card-position-label">${position}</span>
+        <span class="card-numeral">${card.numeral}</span>
+      </div>
+      <div class="card-symbol-wrap">
+        <span class="card-symbol flipped">${card.symbol}</span>
+      </div>
+      <div class="card-bottom">
+        <span class="card-name">${card.name}</span>
+        <span class="card-reversed-label">reversed</span>
+      </div>
+    </div>
+  </div>`;
 }
-
 </script>
 </body>
 </html>
