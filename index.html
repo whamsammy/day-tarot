@@ -99,6 +99,10 @@
   .result-title em { font-style: italic; color: var(--rose); }
 
   .cards-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; width: 100%; }
+
+  @media (max-width: 600px) {
+    .cards-row { display: grid; grid-template-columns: 1fr 1fr; justify-items: center; }
+  }
   .tarot-card { width: 145px; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.12); animation: cardReveal 0.5s ease both; flex-shrink: 0; }
   .tarot-card:nth-child(1) { animation-delay: 0.1s; }
   .tarot-card:nth-child(2) { animation-delay: 0.25s; }
